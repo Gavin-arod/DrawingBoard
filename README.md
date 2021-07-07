@@ -1,3 +1,3 @@
 # DrawingBoard
-## 小画板
+## 晓画板APP
 - View绘制、作图
