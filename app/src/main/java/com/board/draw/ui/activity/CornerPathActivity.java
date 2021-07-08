@@ -60,6 +60,8 @@ public class CornerPathActivity extends BaseActivity implements View.OnClickList
         findViewById(R.id.btn_show_back_image).setOnClickListener(this);
         //橡皮擦
         findViewById(R.id.btn_eraser).setOnClickListener(this);
+        //清屏
+        findViewById(R.id.btn_clear_screen).setOnClickListener(this);
         //保存
         findViewById(R.id.btn_save).setOnClickListener(this);
         //改变笔刷颜色
@@ -146,6 +148,9 @@ public class CornerPathActivity extends BaseActivity implements View.OnClickList
         } else if (viewId == R.id.btn_eraser) {
             //eraser
             cornerPathEffectView.setCurPaintMode(PaintMode.ERASER);
+        } else if (viewId == R.id.btn_clear_screen) {
+            //clear screen
+            cornerPathEffectView.clearScreen();
         }
     }
 

@@ -251,6 +251,14 @@ public class DrawingView extends View {
         postInvalidate();
     }
 
+    /**
+     * 清屏操作
+     */
+    public void clearScreen() {
+        paths.clear();
+        invalidate();
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
@@ -265,6 +273,7 @@ public class DrawingView extends View {
 
                 paths.add(new DrawPath(mPath, getPaintColor(), curPaintMode, false, getBrushSize()));
                 paints.add(mPaint);
+                mPath.reset();
 
                 mPath.moveTo(event.getX(), event.getY());
                 mx = event.getX();
