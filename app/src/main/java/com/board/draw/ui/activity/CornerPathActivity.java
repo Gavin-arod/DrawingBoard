@@ -193,4 +193,15 @@ public class CornerPathActivity extends BaseActivity implements View.OnClickList
         SPUtil.putInt("selectedBrushType", -1);
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out);
+    }
 }

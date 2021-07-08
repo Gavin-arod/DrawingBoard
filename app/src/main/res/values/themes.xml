@@ -15,13 +15,20 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="custom_alert_dialog" parent="Theme.AppCompat.Light.Dialog.Alert">
-    </style>
+    <style name="custom_alert_dialog" parent="Theme.AppCompat.Light.Dialog.Alert" />
 
     <!-- 圆角图片 -->
     <style name="roundedCornerImageStyle">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">8dp</item>
+    </style>
+
+    <style name="Custom.Theme.Splash" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@mipmap/ic_bg_splash</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
 
 </resources>

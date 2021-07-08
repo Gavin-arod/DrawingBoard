@@ -21,4 +21,12 @@
         <item name="cornerSize">8dp</item>
     </style>
 
+    <style name="Custom.Theme.Splash" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@mipmap/ic_bg_splash</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
 </resources>

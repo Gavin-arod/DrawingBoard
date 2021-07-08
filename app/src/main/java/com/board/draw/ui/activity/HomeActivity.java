@@ -33,11 +33,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         if (viewId == R.id.btn_Drawing) {
             Intent intent = new Intent(HomeActivity.this, CornerPathActivity.class);
             startActivity(intent);
-            overridePendingTransition(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out);
         } else if (viewId == R.id.btn_about) {
             Intent intent = new Intent(HomeActivity.this, AboutUsActivity.class);
             startActivity(intent);
-            overridePendingTransition(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out);
         }
+        overridePendingTransition(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out);
     }
 }
