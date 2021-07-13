@@ -10,9 +10,9 @@
     {
       "type": "SINGLE",
       "filters": [],
-      "versionCode": 1,
-      "versionName": "1.0",
-      "outputFile": "晓画板_release_1.0-20210708161542.apk"
+      "versionCode": 100,
+      "versionName": "1.0.0",
+      "outputFile": "晓画板_release_1.0.0-20210713105552.apk"
     }
   ]
 }

@@ -5,11 +5,11 @@
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guide_line_horizontal_95"
+        android:id="@+id/guide_line_horizontal_55"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.98" />
+        app:layout_constraintGuide_percent="0.55" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/app_icon"
@@ -19,9 +19,7 @@
         app:layout_constraintBottom_toTopOf="@+id/app_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:shapeAppearanceOverlay="@style/roundedCornerImageStyle"
-        app:strokeColor="@color/white"
-        app:strokeWidth="1dp" />
+        app:shapeAppearanceOverlay="@style/roundedCornerImageStyle" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/app_name"
@@ -30,9 +28,9 @@
         android:layout_marginTop="8dp"
         android:text="@string/app_name"
         android:textColor="@color/black"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:textStyle="normal"
-        app:layout_constraintBottom_toTopOf="@+id/guide_line_horizontal_95"
+        app:layout_constraintBottom_toTopOf="@+id/guide_line_horizontal_55"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

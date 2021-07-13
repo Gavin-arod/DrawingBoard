@@ -87,4 +87,6 @@
     <color name="color_cc2f333d">#CC2F333D</color>
     <color name="color_f22f333d">#F22F333D</color>
     <color name="color_99fdc472">#99FDC472</color>
+
+    <color name="color_light_dark">#ADADB0</color>
 </resources>

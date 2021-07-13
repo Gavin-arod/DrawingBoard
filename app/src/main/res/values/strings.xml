@@ -6,7 +6,7 @@
     <string name="brush_size">笔刷大小</string>
     <string name="brush_type">笔刷类型</string>
     <string name="brush_color">颜色</string>
-    <string name="Drawing">画图</string>
+    <string name="drawing">画图</string>
     <string name="brush">笔刷</string>
     <string name="eraser">橡皮擦</string>
     <string name="clear_screen">清屏</string>
@@ -14,6 +14,8 @@
     <string name="restore">恢复</string>
     <string name="select_background_image">背景</string>
     <string name="about">关于</string>
+    <string name="save_to_local">保存到手机</string>
+    <string name="input_file_name">请输入文件名</string>
 
     <!-- 笔刷 -->
     <string name="brush_normal">圆笔</string>

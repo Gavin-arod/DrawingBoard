@@ -10,9 +10,11 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.board.draw.R;
 import com.board.draw.constants.BrushType;
+import com.board.draw.dialog.SaveImageDialog;
 import com.board.draw.dialog.SelectBrushDialog;
 import com.board.draw.dialog.SelectCanvasBackgroundDialog;
 import com.board.draw.impl.ItemClickListener;
+import com.board.draw.impl.SaveImageLocalListener;
 import com.board.draw.ui.activity.base.BaseActivity;
 import com.board.draw.ui.view.DrawingView;
 import com.board.draw.ui.view.VirtualColorSeekBar;
@@ -29,7 +31,8 @@ import java.util.List;
 /**
  * drawing page
  */
-public class CornerPathActivity extends BaseActivity implements View.OnClickListener, ItemClickListener, VirtualColorSeekBar.OnStateChangeListener {
+public class CornerPathActivity extends BaseActivity implements View.OnClickListener, ItemClickListener,
+        VirtualColorSeekBar.OnStateChangeListener, SaveImageLocalListener {
     private DrawingView cornerPathEffectView;
     private int paintColorIndex = 0;
     private List<Bitmap> imagesList;
@@ -119,8 +122,14 @@ public class CornerPathActivity extends BaseActivity implements View.OnClickList
             //虚线笔2
             cornerPathEffectView.setCurPaintMode(PaintMode.UNEQUAL_DASHED_LINE);
         } else if (type == 204) {
+            //虚线笔3
+            cornerPathEffectView.setCurPaintMode(PaintMode.CIRCLE_DASHED_LINE);
+        } else if (type == 205) {
             //图案笔
             cornerPathEffectView.setCurPaintMode(PaintMode.PATTERN_PEN);
+        } else if (type == 206) {
+            //图片笔
+            cornerPathEffectView.setCurPaintMode(PaintMode.FLOWER_PEN);
         }
     }
 
@@ -129,7 +138,7 @@ public class CornerPathActivity extends BaseActivity implements View.OnClickList
         int viewId = v.getId();
         if (viewId == R.id.btn_save) {
             //save
-            cornerPathEffectView.saveToBitmap(CornerPathActivity.this);
+            showSaveFileDialog();
         } else if (viewId == R.id.btn_change_paint_color) {
             //brush color
             showSelectPaintColorDialog();
@@ -158,6 +167,20 @@ public class CornerPathActivity extends BaseActivity implements View.OnClickList
     public void itemClick(Bitmap bitmap) {
         BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
         cornerPathEffectView.setBackground(drawable);
+    }
+
+    /**
+     * 显示保存弹框
+     */
+    private void showSaveFileDialog() {
+        SaveImageDialog saveImageDialog = new SaveImageDialog(CornerPathActivity.this);
+        saveImageDialog.setSaveImageLocalListener(this);
+        saveImageDialog.showPopupWindow();
+    }
+
+    @Override
+    public void saveLocal(String fileName) {
+        cornerPathEffectView.saveToBitmap(CornerPathActivity.this, fileName);
     }
 
     //change brush size

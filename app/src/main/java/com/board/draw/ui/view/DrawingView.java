@@ -2,6 +2,8 @@ package com.board.draw.ui.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.BitmapShader;
 import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -13,6 +15,7 @@ import android.graphics.PathDashPathEffect;
 import android.graphics.PathEffect;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,6 +27,7 @@ import androidx.core.content.ContextCompat;
 import com.board.draw.R;
 import com.board.draw.constants.DrawPath;
 import com.board.draw.util.BitmapUtil;
+import com.board.draw.util.DateUtil;
 import com.board.draw.util.PaintMode;
 import com.board.draw.util.PathUtil;
 import com.board.draw.util.ScreenUtil;
@@ -52,6 +56,11 @@ public class DrawingView extends View {
     //虚线笔
     private DashPathEffect dashPathEffect1;
     private DashPathEffect dashPathEffect2;
+    private DashPathEffect dashPathEffect3;
+
+    //本地图片Bitmap
+    private Bitmap localBitmap;
+    private BitmapShader bitmapShader;
 
     //荧光效果
     private BlurMaskFilter blurMaskFilter;
@@ -74,6 +83,8 @@ public class DrawingView extends View {
     private final float[] intervals = new float[]{10, 10};
     //虚线效果2：//画10、空15、画20、空15
     private final float[] intervals2 = new float[]{10, 15, 20, 15};
+    //虚线效果3：画1、空10、画10、空5
+    private final float[] interval3 = new float[]{1, 10, 15, 10};
 
     public DrawingView(Context context) {
         this(context, null);
@@ -102,11 +113,23 @@ public class DrawingView extends View {
         dashPathEffect1 = new DashPathEffect(intervals, 0);
         //虚线笔2
         dashPathEffect2 = new DashPathEffect(intervals2, 0);
+        //虚线笔3
+        dashPathEffect3 = new DashPathEffect(interval3, 0);
+        //图片笔
+        bitmapShader = getLocalBitmap(R.mipmap.ic_flower);
     }
 
     private void initBitmap() {
         mBitmap = Bitmap.createBitmap(ScreenUtil.getWidth(getContext()), ScreenUtil.getHeight(getContext()), Bitmap.Config.ARGB_8888);
         mCanvas = new Canvas(mBitmap);
+    }
+
+    /**
+     * 得到本地图片的bitmapShader对象
+     */
+    public BitmapShader getLocalBitmap(int imageResId) {
+        localBitmap = BitmapFactory.decodeResource(getResources(), imageResId);
+        return new BitmapShader(localBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
     }
 
     public void setCurPaintMode(PaintMode curPaintMode) {
@@ -310,8 +333,8 @@ public class DrawingView extends View {
     /**
      * 保存画布
      */
-    public void saveToBitmap(Context context) {
-        BitmapUtil.saveBitmapToLocal(context, this, "画图-".concat(System.currentTimeMillis() + ""));
+    public void saveToBitmap(Context context, String fileName) {
+        BitmapUtil.saveBitmapToLocal(context, this, fileName.concat("-").concat(DateUtil.timeToDate()));
     }
 
     @Override
@@ -368,6 +391,19 @@ public class DrawingView extends View {
                         //虚线笔2
                         mPaint.setPathEffect(dashPathEffect2);
 
+                        mPaint.setXfermode(null);
+                        mPaint.setMaskFilter(null);
+                        break;
+                    case CIRCLE_DASHED_LINE:
+                        //虚线笔3
+                        mPaint.setPathEffect(dashPathEffect3);
+
+                        mPaint.setXfermode(null);
+                        mPaint.setMaskFilter(null);
+                        break;
+                    case FLOWER_PEN:
+
+                        mPaint.setPathEffect(null);
                         mPaint.setXfermode(null);
                         mPaint.setMaskFilter(null);
                         break;

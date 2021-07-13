@@ -6,42 +6,91 @@
     android:background="@mipmap/ic_bg_horizontal">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guide_line_vertical_50"
+        android:id="@+id/guide_line_vertical_35"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.35" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_line_vertical_65"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.65" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_line_horizontal_50"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.5" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_Drawing"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_drawing"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/bg_setting_button"
-        android:gravity="center"
-        android:text="@string/Drawing"
-        android:textAlignment="center"
-        android:textColor="@color/dark_gray"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="w,2:1"
-        app:layout_constraintEnd_toStartOf="@+id/guide_line_vertical_50"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="0dp"
+        android:background="@color/bg_color"
+        android:elevation="0dp"
+        app:cardBackgroundColor="@color/translucent"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="0dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintBottom_toTopOf="@+id/guide_line_horizontal_50"
+        app:layout_constraintDimensionRatio="h,2:1"
+        app:layout_constraintEnd_toStartOf="@+id/guide_line_vertical_65"
+        app:layout_constraintStart_toEndOf="@+id/guide_line_vertical_35">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_about"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/drawing"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_about_us"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:background="@drawable/bg_setting_button"
-        android:gravity="center"
-        android:text="@string/about"
-        android:textAlignment="center"
-        android:textColor="@color/dark_gray"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="w,2:1"
-        app:layout_constraintStart_toEndOf="@+id/guide_line_vertical_50"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="0dp"
+        android:elevation="0dp"
+        app:cardBackgroundColor="@color/translucent"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="0dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintDimensionRatio="h,2:1"
+        app:layout_constraintEnd_toStartOf="@+id/guide_line_vertical_65"
+        app:layout_constraintStart_toEndOf="@+id/guide_line_vertical_35"
+        app:layout_constraintTop_toBottomOf="@+id/guide_line_horizontal_50">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/about"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

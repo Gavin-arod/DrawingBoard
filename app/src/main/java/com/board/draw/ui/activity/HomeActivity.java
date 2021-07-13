@@ -6,6 +6,7 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.cardview.widget.CardView;
 
 import com.board.draw.R;
 import com.board.draw.ui.activity.base.BaseActivity;
@@ -20,8 +21,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        AppCompatButton btnDrawing = findViewById(R.id.btn_Drawing);
-        AppCompatButton btnAbout = findViewById(R.id.btn_about);
+        CardView btnDrawing = findViewById(R.id.cv_drawing);
+        CardView btnAbout = findViewById(R.id.cv_about_us);
 
         btnDrawing.setOnClickListener(this);
         btnAbout.setOnClickListener(this);
@@ -30,10 +31,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         int viewId = v.getId();
-        if (viewId == R.id.btn_Drawing) {
+        if (viewId == R.id.cv_drawing) {
             Intent intent = new Intent(HomeActivity.this, CornerPathActivity.class);
             startActivity(intent);
-        } else if (viewId == R.id.btn_about) {
+        } else if (viewId == R.id.cv_about_us) {
             Intent intent = new Intent(HomeActivity.this, AboutUsActivity.class);
             startActivity(intent);
         }
