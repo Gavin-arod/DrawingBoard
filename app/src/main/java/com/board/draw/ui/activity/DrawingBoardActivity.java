@@ -123,11 +123,14 @@ public class DrawingBoardActivity extends BaseActivity implements View.OnClickLi
             cornerPathEffectView.setCurPaintMode(PaintMode.UNEQUAL_DASHED_LINE);
         } else if (type == 204) {
             //虚线笔3
-            cornerPathEffectView.setCurPaintMode(PaintMode.CIRCLE_DASHED_LINE);
+            cornerPathEffectView.setCurPaintMode(PaintMode.CIRCLE_LINE_DASHED_LINE);
         } else if (type == 205) {
+            //虚线笔4
+            cornerPathEffectView.setCurPaintMode(PaintMode.ALL_CIRCLE_DASHED_LINE);
+        } else if (type == 206) {
             //图案笔
             cornerPathEffectView.setCurPaintMode(PaintMode.PATTERN_PEN);
-        } else if (type == 206) {
+        } else if (type == 207) {
             //图片笔
             cornerPathEffectView.setCurPaintMode(PaintMode.FLOWER_PEN);
         }

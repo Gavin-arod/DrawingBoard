@@ -83,13 +83,18 @@ public class SelectBrushDialog extends BaseDialogView implements OnBrushTypeSele
 
         BrushType brushType6 = new BrushType();
         brushType6.setType(205);
-        brushType6.setName("图案笔");
+        brushType6.setName("虚线笔4");
         brushTypeList.add(brushType6);
 
         BrushType brushType7 = new BrushType();
         brushType7.setType(206);
-        brushType7.setName("图片笔");
+        brushType7.setName("图案笔");
         brushTypeList.add(brushType7);
+
+        BrushType brushType8 = new BrushType();
+        brushType8.setType(207);
+        brushType8.setName("图片笔");
+        brushTypeList.add(brushType8);
 
         return brushTypeList;
     }

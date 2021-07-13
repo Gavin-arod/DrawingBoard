@@ -57,6 +57,7 @@ public class DrawingView extends View {
     private DashPathEffect dashPathEffect1;
     private DashPathEffect dashPathEffect2;
     private DashPathEffect dashPathEffect3;
+    private DashPathEffect dashPathEffect4;
 
     //本地图片Bitmap
     private Bitmap localBitmap;
@@ -85,6 +86,8 @@ public class DrawingView extends View {
     private final float[] intervals2 = new float[]{10, 15, 20, 15};
     //虚线效果3：画1、空10、画10、空5
     private final float[] interval3 = new float[]{1, 10, 15, 10};
+    //虚线4效果:画1、空10
+    private final float[] interval4 = new float[]{1, 10};
 
     public DrawingView(Context context) {
         this(context, null);
@@ -115,6 +118,8 @@ public class DrawingView extends View {
         dashPathEffect2 = new DashPathEffect(intervals2, 0);
         //虚线笔3
         dashPathEffect3 = new DashPathEffect(interval3, 0);
+        //虚线4
+        dashPathEffect4 = new DashPathEffect(interval4, 0);
         //图片笔
         bitmapShader = getLocalBitmap(R.mipmap.ic_flower);
     }
@@ -288,8 +293,8 @@ public class DrawingView extends View {
             case MotionEvent.ACTION_DOWN:
                 if (curPaintMode == PaintMode.PATTERN_PEN) {
                     //图案笔
-                    mPath = PathUtil.buildStarPath();
-                    pathDashPathEffect = new PathDashPathEffect(mPath, 50 * 1.5f, 0, PathDashPathEffect.Style.TRANSLATE);
+                    mPath = PathUtil.drawStarPath(25);
+                    pathDashPathEffect = new PathDashPathEffect(mPath, 25 * 1.5f, 0, PathDashPathEffect.Style.ROTATE);
                 } else {
                     mPath = new Path();
                 }
@@ -394,9 +399,16 @@ public class DrawingView extends View {
                         mPaint.setXfermode(null);
                         mPaint.setMaskFilter(null);
                         break;
-                    case CIRCLE_DASHED_LINE:
+                    case CIRCLE_LINE_DASHED_LINE:
                         //虚线笔3
                         mPaint.setPathEffect(dashPathEffect3);
+
+                        mPaint.setXfermode(null);
+                        mPaint.setMaskFilter(null);
+                        break;
+                    case ALL_CIRCLE_DASHED_LINE:
+                        //虚线4
+                        mPaint.setPathEffect(dashPathEffect4);
 
                         mPaint.setXfermode(null);
                         mPaint.setMaskFilter(null);

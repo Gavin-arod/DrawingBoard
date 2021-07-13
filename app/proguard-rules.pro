@@ -62,6 +62,13 @@
 -dontwarn org.junit.**
 
 #---------------------------------------默认保留区------------------------------------------------------------------
+
+#--------------------------------------------混淆字典---------------------------------------------------------------
+-obfuscationdictionary proguard_text.txt
+-classobfuscationdictionary proguard_text.txt
+-packageobfuscationdictionary proguard_text.txt
+#------------------------------------------------------------------------------------------------------------------
+
 #---------------------------------默认保留区---------------------------------
 -keep public class * extends android.app.Activity
 -keep public class * extends androidx.appcompat.app.AppCompatActivity
@@ -139,4 +146,6 @@
 -keep enum org.greenrobot.eventbus.ThreadMode { *; }
 #-------------------------------------------------------------------------------------------------
 
-
+#--------------------------------------------immersionbar-----------------------------------------
+-keep class com.gyf.immersionbar.* {*;}
+ -dontwarn com.gyf.immersionbar.**

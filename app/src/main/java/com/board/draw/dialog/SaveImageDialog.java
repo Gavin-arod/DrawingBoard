@@ -91,7 +91,7 @@ public class SaveImageDialog extends BaseDialogView implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_confirm_save) {
-            Editable editable = etInputFileName.getText();
+            Editable editable = getInputFileNameView().getText();
             if (editable != null && !"".equals(editable.toString())) {
                 saveImageLocalListener.saveLocal(editable.toString());
                 dismiss();
