@@ -31,7 +31,7 @@ import java.util.List;
 /**
  * drawing page
  */
-public class CornerPathActivity extends BaseActivity implements View.OnClickListener, ItemClickListener,
+public class DrawingBoardActivity extends BaseActivity implements View.OnClickListener, ItemClickListener,
         VirtualColorSeekBar.OnStateChangeListener, SaveImageLocalListener {
     private DrawingView cornerPathEffectView;
     private int paintColorIndex = 0;
@@ -50,7 +50,7 @@ public class CornerPathActivity extends BaseActivity implements View.OnClickList
 
         //获取本地图片列表
         if (imagesList == null) {
-            imagesList = AssetsUtil.getAssetsFiles(CornerPathActivity.this);
+            imagesList = AssetsUtil.getAssetsFiles(DrawingBoardActivity.this);
         }
 
         //brush size SeekBar view
@@ -93,7 +93,7 @@ public class CornerPathActivity extends BaseActivity implements View.OnClickList
      * select canvas background image
      */
     private void showSelectBackImageDialog() {
-        SelectCanvasBackgroundDialog dialog = new SelectCanvasBackgroundDialog(CornerPathActivity.this, imagesList, this);
+        SelectCanvasBackgroundDialog dialog = new SelectCanvasBackgroundDialog(DrawingBoardActivity.this, imagesList, this);
         dialog.setBackgroundColor(R.color.transparent);
         dialog.showPopupWindow();
     }
@@ -102,7 +102,7 @@ public class CornerPathActivity extends BaseActivity implements View.OnClickList
      * select brush
      */
     private void showSelectBrushTypeDialog() {
-        SelectBrushDialog selectBrushDialog = new SelectBrushDialog(CornerPathActivity.this);
+        SelectBrushDialog selectBrushDialog = new SelectBrushDialog(DrawingBoardActivity.this);
         selectBrushDialog.showPopupWindow();
     }
 
@@ -173,14 +173,14 @@ public class CornerPathActivity extends BaseActivity implements View.OnClickList
      * 显示保存弹框
      */
     private void showSaveFileDialog() {
-        SaveImageDialog saveImageDialog = new SaveImageDialog(CornerPathActivity.this);
+        SaveImageDialog saveImageDialog = new SaveImageDialog(DrawingBoardActivity.this);
         saveImageDialog.setSaveImageLocalListener(this);
         saveImageDialog.showPopupWindow();
     }
 
     @Override
     public void saveLocal(String fileName) {
-        cornerPathEffectView.saveToBitmap(CornerPathActivity.this, fileName);
+        cornerPathEffectView.saveToBitmap(DrawingBoardActivity.this, fileName);
     }
 
     //change brush size

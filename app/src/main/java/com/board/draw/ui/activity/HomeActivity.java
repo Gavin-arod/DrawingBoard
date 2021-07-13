@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.cardview.widget.CardView;
 
 import com.board.draw.R;
@@ -32,7 +31,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
         int viewId = v.getId();
         if (viewId == R.id.cv_drawing) {
-            Intent intent = new Intent(HomeActivity.this, CornerPathActivity.class);
+            Intent intent = new Intent(HomeActivity.this, DrawingBoardActivity.class);
             startActivity(intent);
         } else if (viewId == R.id.cv_about_us) {
             Intent intent = new Intent(HomeActivity.this, AboutUsActivity.class);
