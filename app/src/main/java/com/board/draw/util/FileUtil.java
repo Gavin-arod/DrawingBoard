@@ -1,37 +1,55 @@
 package com.board.draw.util;
 
 import android.content.Context;
-import android.os.Environment;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import com.board.draw.constants.LocalPic;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class FileUtil {
 
     /**
      * 崩溃日志文件路径
      * SDCard/Android/data/<application package>/cache
-     * data/data/<application package>/cache
      */
-    public static String getCrashLogPath(Context context) {
-        return getCachePath(context) + File.separator + "crashLogs";
+    public static String buildCrashLogPath(Context context) {
+        return context.getExternalFilesDir(null) + File.separator + "crashLogs";
     }
 
     /**
-     * 获取app缓存路径
-     * SDCard/Android/data/<application package>/cache
-     * data/data/<application package>/cache
+     * 绘画图片保存路径
      */
-    public static String getCachePath(Context context) {
-        String cachePath;
-        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
-                || !Environment.isExternalStorageRemovable()) {
-            //外部存储可用
-            cachePath = context.getExternalCacheDir().getAbsolutePath();
-        } else {
-            //外部存储不可用
-            cachePath = context.getCacheDir().getAbsolutePath();
+    public static String buildDrawSavePath(Context context) {
+        return context.getExternalFilesDir(null) + File.separator + "PictureBook";
+    }
+
+    /**
+     * 获取本地保存的绘画图片列表
+     */
+    public static ArrayList<LocalPic> getDrawSaveFileList(Context context) {
+        ArrayList<LocalPic> localPics = new ArrayList<>();
+        String filePath = buildDrawSavePath(context);
+        File PicFile = new File(filePath);
+        String[] allFiles = PicFile.list();
+        if (allFiles == null) {
+            return localPics;
         }
-        return cachePath;
+
+        for (String file : allFiles) {
+            String imagePath = filePath.concat(File.separator).concat(file);
+            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+            LocalPic localPic = new LocalPic();
+            if (bitmap != null) {
+                localPic.setBitmap(bitmap);
+                localPic.setName(file);
+                localPic.setPath(imagePath);
+            }
+            localPics.add(localPic);
+        }
+        return localPics;
     }
 
 }

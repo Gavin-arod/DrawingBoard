@@ -37,7 +37,7 @@
         app:cardElevation="0dp"
         app:cardPreventCornerOverlap="true"
         app:cardUseCompatPadding="true"
-        app:layout_constraintBottom_toTopOf="@+id/guide_line_horizontal_50"
+        app:layout_constraintBottom_toTopOf="@+id/cv_local_image"
         app:layout_constraintDimensionRatio="h,2:1"
         app:layout_constraintEnd_toStartOf="@+id/guide_line_vertical_65"
         app:layout_constraintStart_toEndOf="@+id/guide_line_vertical_35">
@@ -61,6 +61,41 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cv_local_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/bg_color"
+        android:elevation="0dp"
+        app:cardBackgroundColor="@color/translucent"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="0dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintBottom_toTopOf="@+id/guide_line_horizontal_50"
+        app:layout_constraintDimensionRatio="h,2:1"
+        app:layout_constraintEnd_toStartOf="@+id/guide_line_vertical_65"
+        app:layout_constraintStart_toEndOf="@+id/guide_line_vertical_35"
+        app:layout_constraintTop_toBottomOf="@+id/guide_line_horizontal_50">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/local_image"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
         android:id="@+id/cv_about_us"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -73,7 +108,7 @@
         app:layout_constraintDimensionRatio="h,2:1"
         app:layout_constraintEnd_toStartOf="@+id/guide_line_vertical_65"
         app:layout_constraintStart_toEndOf="@+id/guide_line_vertical_35"
-        app:layout_constraintTop_toBottomOf="@+id/guide_line_horizontal_50">
+        app:layout_constraintTop_toBottomOf="@+id/cv_local_image">
 
         <LinearLayout
             android:layout_width="wrap_content"

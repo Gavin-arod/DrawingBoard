@@ -21,9 +21,11 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         setContentView(R.layout.activity_home);
 
         CardView btnDrawing = findViewById(R.id.cv_drawing);
+        CardView btnLocalDrawing = findViewById(R.id.cv_local_image);
         CardView btnAbout = findViewById(R.id.cv_about_us);
 
         btnDrawing.setOnClickListener(this);
+        btnLocalDrawing.setOnClickListener(this);
         btnAbout.setOnClickListener(this);
     }
 
@@ -32,6 +34,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         int viewId = v.getId();
         if (viewId == R.id.cv_drawing) {
             Intent intent = new Intent(HomeActivity.this, DrawingBoardActivity.class);
+            startActivity(intent);
+        } else if (viewId == R.id.cv_local_image) {
+            //本地保存的图片
+            Intent intent = new Intent(HomeActivity.this, LocalPictureBookActivity.class);
             startActivity(intent);
         } else if (viewId == R.id.cv_about_us) {
             Intent intent = new Intent(HomeActivity.this, AboutUsActivity.class);

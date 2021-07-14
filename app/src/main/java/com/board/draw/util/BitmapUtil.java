@@ -1,8 +1,11 @@
 package com.board.draw.util;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 
@@ -12,8 +15,8 @@ import java.io.IOException;
 
 public class BitmapUtil {
 
-    public static Bitmap getBitmap(View view) {
-        Bitmap newBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+    public static Bitmap getBitmap(Context context, View view) {
+        Bitmap newBitmap = Bitmap.createBitmap(ScreenUtil.getWidth(context), ScreenUtil.getHeight(context), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(newBitmap);
         view.draw(canvas);
         return newBitmap;
@@ -24,7 +27,7 @@ public class BitmapUtil {
      */
     public static void saveBitmapToLocal(Context context, View view, String fileName) {
         try {
-            String filePath = context.getExternalFilesDir(null) + "/";
+            String filePath = FileUtil.buildDrawSavePath(context);
             File dirFile = new File(filePath);
             if (!dirFile.exists()) {
                 try {
@@ -38,12 +41,16 @@ public class BitmapUtil {
             }
             File file = new File(filePath, fileName + ".png");
             FileOutputStream fos = new FileOutputStream(file);
-            getBitmap(view).compress(Bitmap.CompressFormat.PNG, 100, fos);
+            getBitmap(context, view).compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.flush();
             fos.close();
 
-            // 把文件插入到系统图库
-//            MediaStore.Images.Media.insertImage(context.getContentResolver(), file.getAbsolutePath(), fileName, null);
+            //通知相册刷新
+            MediaStore.Images.Media.insertImage(context.getContentResolver(), file.getAbsolutePath(), fileName, null);
+            Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            Uri uri = Uri.fromFile(file);
+            intent.setData(uri);
+            context.sendBroadcast(intent);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -31,6 +31,6 @@ public class SplashActivity extends BaseActivity {
             startActivity(intent);
             finish();
             overridePendingTransition(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out);
-        }, 3500);
+        }, 2000);
     }
 }

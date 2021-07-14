@@ -120,9 +120,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         PrintWriter pw = null;
         try {
             //Log保存路径
-            // SDCard/Android/data/<application package>/cache
-            // data/data/<application package>/cache
-            File dir = new File(FileUtil.getCrashLogPath(mContext));
+            File dir = new File(FileUtil.buildCrashLogPath(mContext));
             if (!dir.exists()) {
                 boolean success = dir.mkdirs();
                 if (!success) {

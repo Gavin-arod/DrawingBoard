@@ -7,6 +7,7 @@
     <string name="brush_type">笔刷类型</string>
     <string name="brush_color">颜色</string>
     <string name="drawing">画图</string>
+    <string name="local_image">绘本集</string>
     <string name="brush">笔刷</string>
     <string name="eraser">橡皮擦</string>
     <string name="clear_screen">清屏</string>
@@ -20,5 +21,7 @@
     <!-- 笔刷 -->
     <string name="brush_normal">圆笔</string>
     <string name="brush_highlighter">荧光笔</string>
+
+    <string name="none_image">暂无绘本，快去绘画吧</string>
 
 </resources>

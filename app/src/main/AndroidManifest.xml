@@ -14,6 +14,7 @@
         android:theme="@style/Theme.DrawingBoard">
         <activity
             android:name=".ui.activity.SplashActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|screenSize|navigation"
             android:screenOrientation="sensor"
             android:theme="@style/Custom.Theme.Splash">
             <intent-filter>
@@ -25,12 +26,25 @@
         <activity
 
             android:name=".ui.activity.DrawingBoardActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|screenSize|navigation"
             android:screenOrientation="landscape" />
         <activity
             android:name=".ui.activity.AboutUsActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|screenSize|navigation"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.HomeActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|screenSize|navigation"
+            android:screenOrientation="landscape" />
+
+        <activity
+            android:name=".ui.activity.LocalPictureBookActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|screenSize|navigation"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.activity.ShowPicActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|screenSize|navigation"
             android:screenOrientation="landscape" />
     </application>
 
