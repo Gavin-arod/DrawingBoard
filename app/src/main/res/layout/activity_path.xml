@@ -13,6 +13,13 @@
         app:layout_constraintGuide_percent="0.02" />
 
     <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_line_vertical_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.04" />
+
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guide_line_horizontal_08"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -142,10 +149,9 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="4dp"
-        app:layout_constraintDimensionRatio="w,16:9"
         app:layout_constraintBottom_toTopOf="@+id/guide_line_horizontal_88"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guide_line_vertical_96"
+        app:layout_constraintStart_toEndOf="@+id/guide_line_vertical_4"
         app:layout_constraintTop_toBottomOf="@+id/guide_line_horizontal_08" />
 
     <com.board.draw.ui.view.VirtualColorSeekBar
@@ -164,8 +170,10 @@
         android:background="@drawable/bg_alpha_with_top_radius"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guide_line_horizontal_88" />
+        app:layout_constraintTop_toBottomOf="@+id/guide_line_horizontal_88"
+        app:layout_constraintVertical_bias="0.0" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_show_brush"
@@ -175,6 +183,22 @@
         android:drawableTop="@mipmap/ic_setting_brush"
         android:gravity="center"
         android:text="@string/brush"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="w,2:1"
+        app:layout_constraintEnd_toStartOf="@+id/btn_show_graphics"
+        app:layout_constraintTop_toBottomOf="@+id/guide_line_horizontal_88" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_show_graphics"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:drawableTop="@mipmap/ic_shape_graphics"
+        android:gravity="center"
+        android:text="@string/graphics"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="10sp"
@@ -196,7 +220,8 @@
         android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="w,2:1"
-        app:layout_constraintEnd_toStartOf="@+id/guide_line_vertical_50"
+        app:layout_constraintEnd_toEndOf="@+id/guide_line_vertical_50"
+        app:layout_constraintStart_toStartOf="@+id/guide_line_vertical_50"
         app:layout_constraintTop_toBottomOf="@+id/guide_line_horizontal_88" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -212,7 +237,7 @@
         android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="w,2:1"
-        app:layout_constraintStart_toEndOf="@+id/guide_line_vertical_50"
+        app:layout_constraintStart_toEndOf="@+id/btn_eraser"
         app:layout_constraintTop_toBottomOf="@+id/guide_line_horizontal_88" />
 
     <androidx.appcompat.widget.AppCompatButton

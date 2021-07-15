@@ -28,6 +28,7 @@ import com.board.draw.R;
 import com.board.draw.constants.DrawPath;
 import com.board.draw.util.BitmapUtil;
 import com.board.draw.util.DateUtil;
+import com.board.draw.util.DrawMode;
 import com.board.draw.util.PaintMode;
 import com.board.draw.util.PathUtil;
 import com.board.draw.util.ScreenUtil;
@@ -36,7 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 画笔
+ * 画布
  */
 public class DrawingView extends View {
     private Bitmap mBitmap;
@@ -49,6 +50,8 @@ public class DrawingView extends View {
     private PathEffect mPathEffect;
     //画笔类型
     private PaintMode curPaintMode = PaintMode.PENCIL;
+    //画布类型
+    private DrawMode curDrawMode = DrawMode.DRAW_PATH;
 
     private PorterDuffXfermode porterDuffXfermode;
     //图案笔
@@ -58,6 +61,7 @@ public class DrawingView extends View {
     private DashPathEffect dashPathEffect2;
     private DashPathEffect dashPathEffect3;
     private DashPathEffect dashPathEffect4;
+    private DashPathEffect dashPathEffect5;
 
     //本地图片Bitmap
     private Bitmap localBitmap;
@@ -84,10 +88,12 @@ public class DrawingView extends View {
     private final float[] intervals = new float[]{10, 10};
     //虚线效果2：//画10、空15、画20、空15
     private final float[] intervals2 = new float[]{10, 15, 20, 15};
-    //虚线效果3：画1、空10、画10、空5
-    private final float[] interval3 = new float[]{1, 10, 15, 10};
-    //虚线4效果:画1、空10
-    private final float[] interval4 = new float[]{1, 10};
+    //虚线效果3：画10、空10、画1、空10、画1、空10、画1、空10
+    private final float[] interval3 = new float[]{10, 10, 1, 10, 1, 10, 1, 10};
+    //虚线4效果:画10、空10、画1、空10
+    private final float[] interval4 = new float[]{10, 10, 1, 10};
+    //虚线5效果：画10、空10、画1、空10、画1、空10
+    private final float[] interval5 = new float[]{10, 10, 1, 10, 1, 10};
 
     public DrawingView(Context context) {
         this(context, null);
@@ -120,6 +126,8 @@ public class DrawingView extends View {
         dashPathEffect3 = new DashPathEffect(interval3, 0);
         //虚线4
         dashPathEffect4 = new DashPathEffect(interval4, 0);
+        //虚线5
+        dashPathEffect5 = new DashPathEffect(interval5, 0);
         //图片笔
         bitmapShader = getLocalBitmap(R.mipmap.ic_flower);
     }
@@ -137,8 +145,18 @@ public class DrawingView extends View {
         return new BitmapShader(localBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
     }
 
+    /**
+     * 设置画笔类型
+     */
     public void setCurPaintMode(PaintMode curPaintMode) {
         this.curPaintMode = curPaintMode;
+    }
+
+    /**
+     * 设置画布类型
+     */
+    public void setCurDrawMode(DrawMode curDrawMode) {
+        this.curDrawMode = curDrawMode;
     }
 
     @Override
@@ -303,9 +321,9 @@ public class DrawingView extends View {
                 paints.add(mPaint);
                 mPath.reset();
 
-                mPath.moveTo(event.getX(), event.getY());
                 mx = event.getX();
                 my = event.getY();
+                mPath.moveTo(mx, my);
                 break;
             case MotionEvent.ACTION_MOVE:
                 float x = event.getX();
@@ -355,7 +373,7 @@ public class DrawingView extends View {
             for (DrawPath drawPath : paths) {
                 mPaint.setStrokeWidth(drawPath.getBrushSize());
                 mPaint.setColor(drawPath.getColor());
-
+                //画笔类型
                 switch (drawPath.getDrawingMode()) {
                     case ERASER:
                         //橡皮擦
@@ -413,6 +431,13 @@ public class DrawingView extends View {
                         mPaint.setXfermode(null);
                         mPaint.setMaskFilter(null);
                         break;
+                    case FIVE_DASHED_LINE:
+                        //虚线5
+                        mPaint.setPathEffect(dashPathEffect5);
+
+                        mPaint.setXfermode(null);
+                        mPaint.setMaskFilter(null);
+                        break;
                     case FLOWER_PEN:
 
                         mPaint.setPathEffect(null);
@@ -420,7 +445,35 @@ public class DrawingView extends View {
                         mPaint.setMaskFilter(null);
                         break;
                 }
-                mCanvas.drawPath(drawPath.getPath(), this.mPaint);
+
+                //画布类型
+                switch (curDrawMode) {
+                    case DRAW_PATH:
+                    default:
+                        //路径
+                        mCanvas.drawPath(drawPath.getPath(), this.mPaint);
+                        break;
+                    case DRAW_CIRCLE:
+                        //圆
+                        mCanvas.drawCircle(mx, my, 300f, mPaint);
+                        break;
+                    case DRAW_TRIANGLE:
+                        //三角形
+
+                        break;
+                    case DRAW_RECTANGLE:
+                        //矩形
+
+                        break;
+                    case DRAW_STRAIGHT_LINE:
+                        //直线
+
+                        break;
+                    case DRAW_POLYGON:
+                        //多边形
+
+                        break;
+                }
             }
         }
         canvas.drawBitmap(mBitmap, 0f, 0f, this.mBitmapPaint);

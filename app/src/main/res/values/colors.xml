@@ -68,6 +68,7 @@
     <color name="blue">#00FFFF</color>
     <color name="blue_2">#0073FF</color>
     <color name="red">#FD335B</color>
+    <color name="color_66fd335b">#1AFD335B</color>
     <color name="red_press">#7700FF</color>
     <color name="grey">#D5D5D5</color>
     <color name="default_press">#D69D4D</color>

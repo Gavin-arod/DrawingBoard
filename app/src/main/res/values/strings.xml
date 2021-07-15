@@ -9,6 +9,7 @@
     <string name="drawing">画图</string>
     <string name="local_image">绘本集</string>
     <string name="brush">笔刷</string>
+    <string name="graphics">图形</string>
     <string name="eraser">橡皮擦</string>
     <string name="clear_screen">清屏</string>
     <string name="revoke">撤回</string>

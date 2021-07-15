@@ -10,15 +10,19 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.board.draw.R;
 import com.board.draw.constants.BrushType;
+import com.board.draw.constants.CanvasType;
 import com.board.draw.dialog.SaveImageDialog;
 import com.board.draw.dialog.SelectBrushDialog;
 import com.board.draw.dialog.SelectCanvasBackgroundDialog;
+import com.board.draw.dialog.SelectCanvasModeDialog;
+import com.board.draw.impl.CanvasTypeClickListener;
 import com.board.draw.impl.ItemClickListener;
 import com.board.draw.impl.SaveImageLocalListener;
 import com.board.draw.ui.activity.base.BaseActivity;
 import com.board.draw.ui.view.DrawingView;
 import com.board.draw.ui.view.VirtualColorSeekBar;
 import com.board.draw.util.AssetsUtil;
+import com.board.draw.util.DrawMode;
 import com.board.draw.util.PaintMode;
 import com.board.draw.util.SPUtil;
 
@@ -26,16 +30,19 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * drawing page
  */
 public class DrawingBoardActivity extends BaseActivity implements View.OnClickListener, ItemClickListener,
-        VirtualColorSeekBar.OnStateChangeListener, SaveImageLocalListener {
+        VirtualColorSeekBar.OnStateChangeListener, SaveImageLocalListener, CanvasTypeClickListener {
     private DrawingView cornerPathEffectView;
     private int paintColorIndex = 0;
     private List<Bitmap> imagesList;
+    //画布类型集合
+    private final List<CanvasType> canvasTypeList = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,6 +82,29 @@ public class DrawingBoardActivity extends BaseActivity implements View.OnClickLi
         findViewById(R.id.btn_restore).setOnClickListener(this);
         //brush button
         findViewById(R.id.btn_show_brush).setOnClickListener(this);
+        findViewById(R.id.btn_show_graphics).setOnClickListener(this);
+
+        canvasTypeList.addAll(initData());
+    }
+
+    private List<CanvasType> initData() {
+        List<CanvasType> list = new ArrayList<>();
+
+        list.add(buildCanvasType(1, R.mipmap.ic_shape_path, "路径"));
+        list.add(buildCanvasType(2, R.mipmap.ic_shape_circular, "圆形"));
+        list.add(buildCanvasType(3, R.mipmap.ic_shape_straight, "直线"));
+        list.add(buildCanvasType(4, R.mipmap.ic_shape_triangle, "三角形"));
+        list.add(buildCanvasType(5, R.mipmap.ic_shape_hexagon, "多边形"));
+        list.add(buildCanvasType(6, R.mipmap.ic_shape_rectangle, "矩形"));
+        return list;
+    }
+
+    private CanvasType buildCanvasType(int type, int resId, String name) {
+        CanvasType canvasType = new CanvasType();
+        canvasType.setType(type);
+        canvasType.setGraphicsId(resId);
+        canvasType.setName(name);
+        return canvasType;
     }
 
     private void showSelectPaintColorDialog() {
@@ -106,6 +136,50 @@ public class DrawingBoardActivity extends BaseActivity implements View.OnClickLi
         selectBrushDialog.showPopupWindow();
     }
 
+    /**
+     * select draw mode
+     */
+    private void showSelectDrawModeDialog() {
+        SelectCanvasModeDialog dialog = new SelectCanvasModeDialog(DrawingBoardActivity.this, canvasTypeList, this);
+        dialog.showPopupWindow();
+    }
+
+    @Override
+    public void clickCanvasItemType(CanvasType canvasType) {
+        for (int i = 0; i < canvasTypeList.size(); i++) {
+            CanvasType curCanvasType = canvasTypeList.get(i);
+            canvasTypeList.get(i).setSelected(canvasType.getType() == curCanvasType.getType());
+        }
+
+        switch (canvasType.getType()) {
+            case 1:
+            default:
+                //路径
+                cornerPathEffectView.setCurDrawMode(DrawMode.DRAW_PATH);
+                break;
+            case 2:
+                //圆形
+                cornerPathEffectView.setCurDrawMode(DrawMode.DRAW_CIRCLE);
+                break;
+            case 3:
+                //直线
+                cornerPathEffectView.setCurDrawMode(DrawMode.DRAW_STRAIGHT_LINE);
+                break;
+            case 4:
+                //三角形
+                cornerPathEffectView.setCurDrawMode(DrawMode.DRAW_TRIANGLE);
+                break;
+            case 5:
+                //多边形
+                cornerPathEffectView.setCurDrawMode(DrawMode.DRAW_POLYGON);
+                break;
+            case 6:
+                //矩形
+                cornerPathEffectView.setCurDrawMode(DrawMode.DRAW_RECTANGLE);
+                break;
+        }
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void selectBrushEvent(BrushType brushType) {
         int type = brushType.getType();
@@ -133,6 +207,9 @@ public class DrawingBoardActivity extends BaseActivity implements View.OnClickLi
         } else if (type == 207) {
             //图片笔
             cornerPathEffectView.setCurPaintMode(PaintMode.FLOWER_PEN);
+        } else if (type == 208) {
+            //虚线5
+            cornerPathEffectView.setCurPaintMode(PaintMode.FIVE_DASHED_LINE);
         }
     }
 
@@ -163,6 +240,9 @@ public class DrawingBoardActivity extends BaseActivity implements View.OnClickLi
         } else if (viewId == R.id.btn_clear_screen) {
             //clear screen
             cornerPathEffectView.clearScreen();
+        } else if (viewId == R.id.btn_show_graphics) {
+            //select draw graphics
+            showSelectDrawModeDialog();
         }
     }
 

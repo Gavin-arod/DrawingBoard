@@ -15,8 +15,8 @@ import java.io.IOException;
 
 public class BitmapUtil {
 
-    public static Bitmap getBitmap(Context context, View view) {
-        Bitmap newBitmap = Bitmap.createBitmap(ScreenUtil.getWidth(context), ScreenUtil.getHeight(context), Bitmap.Config.ARGB_8888);
+    public static Bitmap getBitmap(View view) {
+        Bitmap newBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(newBitmap);
         view.draw(canvas);
         return newBitmap;
@@ -41,7 +41,7 @@ public class BitmapUtil {
             }
             File file = new File(filePath, fileName + ".png");
             FileOutputStream fos = new FileOutputStream(file);
-            getBitmap(context, view).compress(Bitmap.CompressFormat.PNG, 100, fos);
+            getBitmap(view).compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.flush();
             fos.close();
 
