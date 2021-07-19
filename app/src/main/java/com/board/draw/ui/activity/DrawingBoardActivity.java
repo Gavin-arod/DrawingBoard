@@ -11,12 +11,14 @@ import androidx.appcompat.app.AlertDialog;
 import com.board.draw.R;
 import com.board.draw.constants.BrushType;
 import com.board.draw.constants.CanvasType;
+import com.board.draw.dialog.ClearScreenDialog;
 import com.board.draw.dialog.SaveImageDialog;
 import com.board.draw.dialog.SelectBrushDialog;
 import com.board.draw.dialog.SelectCanvasBackgroundDialog;
 import com.board.draw.dialog.SelectCanvasModeDialog;
 import com.board.draw.impl.CanvasTypeClickListener;
 import com.board.draw.impl.ItemClickListener;
+import com.board.draw.impl.OnClearScreenListener;
 import com.board.draw.impl.SaveImageLocalListener;
 import com.board.draw.ui.activity.base.BaseActivity;
 import com.board.draw.ui.view.DrawingView;
@@ -37,7 +39,8 @@ import java.util.List;
  * drawing page
  */
 public class DrawingBoardActivity extends BaseActivity implements View.OnClickListener, ItemClickListener,
-        VirtualColorSeekBar.OnStateChangeListener, SaveImageLocalListener, CanvasTypeClickListener {
+        VirtualColorSeekBar.OnStateChangeListener, SaveImageLocalListener, CanvasTypeClickListener,
+        OnClearScreenListener {
     private DrawingView cornerPathEffectView;
     private int paintColorIndex = 0;
     private List<Bitmap> imagesList;
@@ -239,11 +242,21 @@ public class DrawingBoardActivity extends BaseActivity implements View.OnClickLi
             cornerPathEffectView.setCurPaintMode(PaintMode.ERASER);
         } else if (viewId == R.id.btn_clear_screen) {
             //clear screen
-            cornerPathEffectView.clearScreen();
+            ClearScreenDialog clearScreenDialog = new ClearScreenDialog(DrawingBoardActivity.this);
+            clearScreenDialog.setClearScreenListener(this);
+            clearScreenDialog.showPopupWindow();
         } else if (viewId == R.id.btn_show_graphics) {
             //select draw graphics
             showSelectDrawModeDialog();
         }
+    }
+
+    /**
+     * 清屏回调
+     */
+    @Override
+    public void clearScreen() {
+        cornerPathEffectView.clearScreen();
     }
 
     @Override
