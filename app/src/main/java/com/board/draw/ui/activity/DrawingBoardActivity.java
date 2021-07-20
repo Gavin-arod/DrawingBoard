@@ -1,13 +1,15 @@
 package com.board.draw.ui.activity;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 
+import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.board.draw.R;
 import com.board.draw.constants.BrushType;
 import com.board.draw.constants.CanvasType;
@@ -40,7 +42,7 @@ import java.util.List;
  */
 public class DrawingBoardActivity extends BaseActivity implements View.OnClickListener, ItemClickListener,
         VirtualColorSeekBar.OnStateChangeListener, SaveImageLocalListener, CanvasTypeClickListener,
-        OnClearScreenListener {
+        OnClearScreenListener, ColorChooserDialog.ColorCallback {
     private DrawingView cornerPathEffectView;
     private int paintColorIndex = 0;
     private List<Bitmap> imagesList;
@@ -110,16 +112,33 @@ public class DrawingBoardActivity extends BaseActivity implements View.OnClickLi
         return canvasType;
     }
 
+    /**
+     * 颜色值选择框
+     */
     private void showSelectPaintColorDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.custom_alert_dialog);
-        builder.setTitle("选择画笔颜色：");
+        new ColorChooserDialog.Builder(this, R.string.choose_brush_color)
+                .backButton(R.string.back)
+                .cancelButton(R.string.cancel)
+                .customButton(R.string.custom)
+                .doneButton(R.string.confirm)
+                .presetsButton(R.string.back)
+                .allowUserColorInputAlpha(false)
+                .show(this);
+    }
 
-        builder.setSingleChoiceItems(R.array.paintColor, paintColorIndex, (dialog, which) -> {
-            paintColorIndex = which;
-            cornerPathEffectView.selectPaintColor(which);
-            dialog.dismiss();
-        });
-        builder.show();
+    @Override
+    public void onColorSelection(@NonNull ColorChooserDialog dialog, int selectedColor) {
+        if (!dialog.isAccentMode()) {
+            if (selectedColor != 0 && Color.alpha(selectedColor) != 255) {
+                selectedColor = R.color.red;
+            }
+            cornerPathEffectView.selectPaintColor(selectedColor);
+        }
+    }
+
+    @Override
+    public void onColorChooserDismissed(@NonNull ColorChooserDialog dialog) {
+
     }
 
     /**

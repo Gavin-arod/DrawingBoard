@@ -212,34 +212,8 @@ public class DrawingView extends View {
     /**
      * 设置画笔颜色
      */
-    public void selectPaintColor(int which) {
-        String color = this.getResources().getStringArray(R.array.paintColor)[which];
-        int colorResId;
-        switch (color) {
-            case "BLUE":
-                colorResId = Color.BLUE;
-                break;
-            case "BLACK":
-                colorResId = Color.BLACK;
-                break;
-            case "GREEN":
-                colorResId = Color.GREEN;
-                break;
-            case "YELLOW":
-                colorResId = Color.YELLOW;
-                break;
-            case "CYAN":
-                colorResId = Color.CYAN;
-                break;
-            case "LTGRAY":
-                colorResId = Color.LTGRAY;
-                break;
-            case "RED":
-            default:
-                colorResId = Color.RED;
-                break;
-        }
-        setPaintColor(colorResId);
+    public void selectPaintColor(int selectedColor) {
+        setPaintColor(selectedColor);
     }
 
     /**

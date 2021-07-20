@@ -18,11 +18,17 @@
     <string name="about">关于</string>
     <string name="save_to_local">保存到手机</string>
     <string name="input_file_name">请输入文件名</string>
+    <string name="choose_brush_color">选择画笔颜色：</string>
 
     <!-- 笔刷 -->
     <string name="brush_normal">圆笔</string>
     <string name="brush_highlighter">荧光笔</string>
 
     <string name="none_image">暂无绘本，快去绘画吧</string>
+
+    <string name="back">返回</string>
+    <string name="cancel">取消</string>
+    <string name="custom">自定义</string>
+    <string name="confirm">确定</string>
 
 </resources>
