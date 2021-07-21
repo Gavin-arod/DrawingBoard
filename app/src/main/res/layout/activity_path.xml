@@ -144,7 +144,7 @@
         app:layout_constraintEnd_toStartOf="@+id/guide_line_vertical_98"
         app:layout_constraintTop_toBottomOf="@+id/guide_line_horizontal_2" />
 
-    <com.board.draw.ui.view.DrawingView
+    <com.board.draw.ui.view.PathDrawingView
         android:id="@+id/corner_path_view"
         android:layout_width="0dp"
         android:layout_height="0dp"

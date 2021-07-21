@@ -17,6 +17,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Shader;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -39,14 +40,15 @@ import java.util.List;
 /**
  * 画布
  */
-public class DrawingView extends View {
+public class CircleDrawingView extends View {
     private Bitmap mBitmap;
-    private Canvas mCanvas;
+    private Canvas mPathCanvas;
     private final Paint mBitmapPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     private float mx, my;
 
-    private Paint mPaint;
+    private Paint mPathPaint;
+    //圆画笔
     private PathEffect mPathEffect;
     //画笔类型
     private PaintMode curPaintMode = PaintMode.PENCIL;
@@ -66,6 +68,9 @@ public class DrawingView extends View {
     //本地图片Bitmap
     private Bitmap localBitmap;
     private BitmapShader bitmapShader;
+
+    private float startX;
+    private float startY;
 
     //荧光效果
     private BlurMaskFilter blurMaskFilter;
@@ -95,11 +100,11 @@ public class DrawingView extends View {
     //虚线5效果：画10、空10、画1、空10、画1、空10
     private final float[] interval5 = new float[]{10, 10, 1, 10, 1, 10};
 
-    public DrawingView(Context context) {
+    public CircleDrawingView(Context context) {
         this(context, null);
     }
 
-    public DrawingView(Context context, @Nullable AttributeSet attrs) {
+    public CircleDrawingView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         initBitmap();
         init();
@@ -108,11 +113,12 @@ public class DrawingView extends View {
     private void init() {
         //画布初始背景设为白色
         setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
-        setPaintStyle();
-        initPaint();
+        mPathPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        initPaintStyle(mPathPaint);
+        initPathType();
     }
 
-    private void initPaint() {
+    private void initPathType() {
         //荧光效果
         blurMaskFilter = new BlurMaskFilter(10f, BlurMaskFilter.Blur.OUTER);
         mPathEffect = new CornerPathEffect(getRoundedCorner());
@@ -134,7 +140,7 @@ public class DrawingView extends View {
 
     private void initBitmap() {
         mBitmap = Bitmap.createBitmap(ScreenUtil.getWidth(getContext()), ScreenUtil.getHeight(getContext()), Bitmap.Config.ARGB_8888);
-        mCanvas = new Canvas(mBitmap);
+        mPathCanvas = new Canvas(mBitmap);
     }
 
     /**
@@ -197,15 +203,14 @@ public class DrawingView extends View {
         this.roundedCorner = roundedCorner;
     }
 
-    public void setPaintStyle() {
-        mPaint = new Paint();
-        mPaint.setAntiAlias(true);
-        mPaint.setDither(true);
-        mPaint.setStrokeCap(Paint.Cap.ROUND);
-        mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeJoin(Paint.Join.ROUND);
-        mPaint.setStrokeWidth(getBrushSize());
-        mPaint.setColor(getPaintColor());
+    public void initPaintStyle(Paint paint) {
+        paint.setAntiAlias(true);
+        paint.setDither(true);
+        paint.setStrokeCap(Paint.Cap.ROUND);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeJoin(Paint.Join.ROUND);
+        paint.setStrokeWidth(getBrushSize());
+        paint.setColor(getPaintColor());
     }
 
 
@@ -283,42 +288,66 @@ public class DrawingView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if (curPaintMode == PaintMode.PATTERN_PEN) {
-                    //图案笔
-                    mPath = PathUtil.drawStarPath(25);
-                    pathDashPathEffect = new PathDashPathEffect(mPath, 25 * 1.5f, 0, PathDashPathEffect.Style.ROTATE);
-                } else {
-                    mPath = new Path();
-                }
-
-                paths.add(new DrawPath(mPath, getPaintColor(), curPaintMode, false, getBrushSize()));
-                paints.add(mPaint);
-                mPath.reset();
-
                 mx = event.getX();
                 my = event.getY();
-                mPath.moveTo(mx, my);
+
+                startX = event.getX();
+                startY = event.getY();
+
+                switch (curDrawMode) {
+                    case DRAW_PATH:
+                    default:
+                        if (curPaintMode == PaintMode.PATTERN_PEN) {
+                            //图案笔
+                            mPath = PathUtil.drawStarPath(25);
+                            pathDashPathEffect = new PathDashPathEffect(mPath, 25 * 1.5f, 0, PathDashPathEffect.Style.ROTATE);
+                        } else {
+                            mPath = new Path();
+                        }
+
+                        paths.add(new DrawPath(mPath, getPaintColor(), curPaintMode, false, getBrushSize()));
+                        paints.add(mPathPaint);
+                        mPath.reset();
+
+                        mPath.moveTo(mx, my);
+                        break;
+                    case DRAW_CIRCLE:
+                    case DRAW_STRAIGHT_LINE:
+                        paints.add(mPathPaint);
+                        break;
+                }
                 break;
             case MotionEvent.ACTION_MOVE:
                 float x = event.getX();
                 float y = event.getY();
                 float abs = Math.abs(event.getX() - mx);
                 float abs2 = Math.abs(event.getY() - my);
-                if (abs >= getBrushSize() || abs2 >= getBrushSize()) {
-                    float f3 = 2f;
-                    mPath.quadTo(mx, my, (mx + x) / f3, (my + y) / f3);
-                    mx = x;
-                    my = y;
+                switch (curDrawMode) {
+                    case DRAW_PATH:
+                    default:
+                        if (abs >= getBrushSize() || abs2 >= getBrushSize()) {
+                            float f3 = 2f;
+                            mPath.quadTo(mx, my, (mx + x) / f3, (my + y) / f3);
+                            mx = x;
+                            my = y;
+                        }
+                        break;
+                    case DRAW_CIRCLE:
+                    case DRAW_STRAIGHT_LINE:
+                        mx = event.getX();
+                        my = event.getY();
+                        break;
                 }
                 break;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
-
-                mPath.lineTo(mx, my);
+                if (curDrawMode == DrawMode.DRAW_PATH) {
+                    mPath.lineTo(mx, my);
+                }
                 break;
         }
         performClick();
-        postInvalidate();
+        invalidate();
         return true;
     }
 
@@ -340,116 +369,125 @@ public class DrawingView extends View {
         if (canvas == null) {
             return;
         }
-        mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-        //绘制带有效果的路径
+        mPathCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         canvas.save();
+        //绘制带有效果的路径
         if (paths.size() > 0) {
             for (DrawPath drawPath : paths) {
-                mPaint.setStrokeWidth(drawPath.getBrushSize());
-                mPaint.setColor(drawPath.getColor());
+                mPathPaint.setStrokeWidth(drawPath.getBrushSize());
+                mPathPaint.setColor(drawPath.getColor());
                 //画笔类型
                 switch (drawPath.getDrawingMode()) {
                     case ERASER:
                         //橡皮擦
-                        mPaint.setXfermode(porterDuffXfermode);
+                        mPathPaint.setXfermode(porterDuffXfermode);
 
-                        mPaint.setMaskFilter(null);
-                        mPaint.setPathEffect(mPathEffect);
+                        mPathPaint.setMaskFilter(null);
+                        mPathPaint.setPathEffect(mPathEffect);
                         break;
                     case PENCIL:
                         //铅笔
-                        mPaint.setPathEffect(mPathEffect);
+                        mPathPaint.setPathEffect(mPathEffect);
 
-                        mPaint.setXfermode(null);
-                        mPaint.setMaskFilter(null);
+                        mPathPaint.setXfermode(null);
+                        mPathPaint.setMaskFilter(null);
                         break;
                     case HIGHLIGHTER:
                         //荧光笔
-                        mPaint.setMaskFilter(blurMaskFilter);
+                        mPathPaint.setMaskFilter(blurMaskFilter);
 
-                        mPaint.setXfermode(null);
-                        mPaint.setPathEffect(mPathEffect);
+                        mPathPaint.setXfermode(null);
+                        mPathPaint.setPathEffect(mPathEffect);
                         break;
                     case PATTERN_PEN:
                         //图案笔
-                        mPaint.setPathEffect(pathDashPathEffect);
+                        mPathPaint.setPathEffect(pathDashPathEffect);
 
-                        mPaint.setXfermode(null);
-                        mPaint.setMaskFilter(null);
+                        mPathPaint.setXfermode(null);
+                        mPathPaint.setMaskFilter(null);
                         break;
                     case EQUAL_DASHED_LINE:
                         //虚线笔1
-                        mPaint.setPathEffect(dashPathEffect1);
+                        mPathPaint.setPathEffect(dashPathEffect1);
 
-                        mPaint.setXfermode(null);
-                        mPaint.setMaskFilter(null);
+                        mPathPaint.setXfermode(null);
+                        mPathPaint.setMaskFilter(null);
                         break;
                     case UNEQUAL_DASHED_LINE:
                         //虚线笔2
-                        mPaint.setPathEffect(dashPathEffect2);
+                        mPathPaint.setPathEffect(dashPathEffect2);
 
-                        mPaint.setXfermode(null);
-                        mPaint.setMaskFilter(null);
+                        mPathPaint.setXfermode(null);
+                        mPathPaint.setMaskFilter(null);
                         break;
                     case CIRCLE_LINE_DASHED_LINE:
                         //虚线笔3
-                        mPaint.setPathEffect(dashPathEffect3);
+                        mPathPaint.setPathEffect(dashPathEffect3);
 
-                        mPaint.setXfermode(null);
-                        mPaint.setMaskFilter(null);
+                        mPathPaint.setXfermode(null);
+                        mPathPaint.setMaskFilter(null);
                         break;
                     case ALL_CIRCLE_DASHED_LINE:
                         //虚线4
-                        mPaint.setPathEffect(dashPathEffect4);
+                        mPathPaint.setPathEffect(dashPathEffect4);
 
-                        mPaint.setXfermode(null);
-                        mPaint.setMaskFilter(null);
+                        mPathPaint.setXfermode(null);
+                        mPathPaint.setMaskFilter(null);
                         break;
                     case FIVE_DASHED_LINE:
                         //虚线5
-                        mPaint.setPathEffect(dashPathEffect5);
+                        mPathPaint.setPathEffect(dashPathEffect5);
 
-                        mPaint.setXfermode(null);
-                        mPaint.setMaskFilter(null);
+                        mPathPaint.setXfermode(null);
+                        mPathPaint.setMaskFilter(null);
                         break;
                     case FLOWER_PEN:
 
-                        mPaint.setPathEffect(null);
-                        mPaint.setXfermode(null);
-                        mPaint.setMaskFilter(null);
+                        mPathPaint.setPathEffect(null);
+                        mPathPaint.setXfermode(null);
+                        mPathPaint.setMaskFilter(null);
                         break;
                 }
 
                 //画布类型
-                switch (curDrawMode) {
-                    case DRAW_PATH:
-                    default:
-                        //路径
-                        mCanvas.drawPath(drawPath.getPath(), this.mPaint);
-                        break;
-                    case DRAW_CIRCLE:
-                        //圆
-                        mCanvas.drawCircle(mx, my, 300f, mPaint);
-                        break;
-                    case DRAW_TRIANGLE:
-                        //三角形
-
-                        break;
-                    case DRAW_RECTANGLE:
-                        //矩形
-
-                        break;
-                    case DRAW_STRAIGHT_LINE:
-                        //直线
-
-                        break;
-                    case DRAW_POLYGON:
-                        //多边形
-
-                        break;
+                if (curDrawMode == DrawMode.DRAW_PATH) {//路径
+                    mPathCanvas.drawPath(drawPath.getPath(), this.mPathPaint);
                 }
             }
         }
+
+        //画布类型
+        switch (curDrawMode) {
+            case DRAW_PATH:
+            default:
+                //路径
+//                mPathCanvas.drawPath(drawPath.getPath(), this.mPathPaint);
+                Log.e("画路径：", "DRAW_PATH");
+                break;
+            case DRAW_CIRCLE:
+                //圆
+                mPathCanvas.drawCircle(Math.abs(mx - (mx - startX) / 2f), Math.abs(my - (my - startY) / 2f), Math.abs((mx - startX) / 2f), mPathPaint);
+                Log.e("画圆：", "DRAW_CIRCLE");
+                break;
+            case DRAW_TRIANGLE:
+                //三角形
+
+                break;
+            case DRAW_RECTANGLE:
+                //矩形
+
+                break;
+            case DRAW_STRAIGHT_LINE:
+                //直线
+                mPathCanvas.drawLine(startX, startY, mx, my, mPathPaint);
+                Log.e("画直线：", "DRAW_STRAIGHT_LINE");
+                break;
+            case DRAW_POLYGON:
+                //多边形
+
+                break;
+        }
+
         canvas.drawBitmap(mBitmap, 0f, 0f, this.mBitmapPaint);
         canvas.restore();
     }

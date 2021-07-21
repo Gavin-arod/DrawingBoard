@@ -23,7 +23,7 @@ import com.board.draw.impl.ItemClickListener;
 import com.board.draw.impl.OnClearScreenListener;
 import com.board.draw.impl.SaveImageLocalListener;
 import com.board.draw.ui.activity.base.BaseActivity;
-import com.board.draw.ui.view.DrawingView;
+import com.board.draw.ui.view.PathDrawingView;
 import com.board.draw.ui.view.VirtualColorSeekBar;
 import com.board.draw.util.AssetsUtil;
 import com.board.draw.util.DrawMode;
@@ -43,8 +43,7 @@ import java.util.List;
 public class DrawingBoardActivity extends BaseActivity implements View.OnClickListener, ItemClickListener,
         VirtualColorSeekBar.OnStateChangeListener, SaveImageLocalListener, CanvasTypeClickListener,
         OnClearScreenListener, ColorChooserDialog.ColorCallback {
-    private DrawingView cornerPathEffectView;
-    private int paintColorIndex = 0;
+    private PathDrawingView cornerPathEffectView;
     private List<Bitmap> imagesList;
     //画布类型集合
     private final List<CanvasType> canvasTypeList = new ArrayList<>();
