@@ -53,6 +53,11 @@ android {
             zipAlignEnabled false
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            android.applicationVariants.all { variants ->
+                variants.outputs.all {
+                    outputFileName = getProductName() + "_debug_${variants.versionName}-${releaseApkTime()}.apk"
+                }
+            }
             signingConfig signingConfigs.debug
         }
     }
