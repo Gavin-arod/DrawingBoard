@@ -23,7 +23,7 @@ import com.board.draw.impl.ItemClickListener;
 import com.board.draw.impl.OnClearScreenListener;
 import com.board.draw.impl.SaveImageLocalListener;
 import com.board.draw.ui.activity.base.BaseActivity;
-import com.board.draw.ui.view.PathDrawingView;
+import com.board.draw.ui.view.CircleDrawingView;
 import com.board.draw.ui.view.VirtualColorSeekBar;
 import com.board.draw.util.AssetsUtil;
 import com.board.draw.util.DrawMode;
@@ -43,7 +43,7 @@ import java.util.List;
 public class DrawingBoardActivity extends BaseActivity implements View.OnClickListener, ItemClickListener,
         VirtualColorSeekBar.OnStateChangeListener, SaveImageLocalListener, CanvasTypeClickListener,
         OnClearScreenListener, ColorChooserDialog.ColorCallback {
-    private PathDrawingView cornerPathEffectView;
+    private CircleDrawingView cornerPathEffectView;
     private List<Bitmap> imagesList;
     //画布类型集合
     private final List<CanvasType> canvasTypeList = new ArrayList<>();
@@ -94,20 +94,22 @@ public class DrawingBoardActivity extends BaseActivity implements View.OnClickLi
     private List<CanvasType> initData() {
         List<CanvasType> list = new ArrayList<>();
 
-        list.add(buildCanvasType(1, R.mipmap.ic_shape_path, "路径"));
-        list.add(buildCanvasType(2, R.mipmap.ic_shape_circular, "圆形"));
-        list.add(buildCanvasType(3, R.mipmap.ic_shape_straight, "直线"));
-        list.add(buildCanvasType(4, R.mipmap.ic_shape_triangle, "三角形"));
-        list.add(buildCanvasType(5, R.mipmap.ic_shape_hexagon, "多边形"));
-        list.add(buildCanvasType(6, R.mipmap.ic_shape_rectangle, "矩形"));
+        list.add(buildCanvasType(1, R.mipmap.ic_shape_path, "路径", true));
+        list.add(buildCanvasType(2, R.mipmap.ic_shape_circular, "圆形", false));
+        list.add(buildCanvasType(3, R.mipmap.ic_shape_straight, "直线", false));
+        list.add(buildCanvasType(4, R.mipmap.ic_shape_triangle, "三角形", false));
+        list.add(buildCanvasType(5, R.mipmap.ic_shape_hexagon, "多边形", false));
+        list.add(buildCanvasType(6, R.mipmap.ic_shape_rectangle, "矩形", false));
+        list.add(buildCanvasType(7, R.mipmap.ic_shape_oval, "椭圆", false));
         return list;
     }
 
-    private CanvasType buildCanvasType(int type, int resId, String name) {
+    private CanvasType buildCanvasType(int type, int resId, String name, boolean isSelected) {
         CanvasType canvasType = new CanvasType();
         canvasType.setType(type);
         canvasType.setGraphicsId(resId);
         canvasType.setName(name);
+        canvasType.setSelected(isSelected);
         return canvasType;
     }
 
@@ -197,6 +199,10 @@ public class DrawingBoardActivity extends BaseActivity implements View.OnClickLi
             case 6:
                 //矩形
                 cornerPathEffectView.setCurDrawMode(DrawMode.DRAW_RECTANGLE);
+                break;
+            case 7:
+                //椭圆
+                cornerPathEffectView.setCurDrawMode(DrawMode.DRAW_OVAL);
                 break;
         }
     }

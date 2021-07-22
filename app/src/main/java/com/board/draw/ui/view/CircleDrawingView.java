@@ -9,15 +9,17 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.CornerPathEffect;
 import android.graphics.DashPathEffect;
+import android.graphics.MaskFilter;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathDashPathEffect;
 import android.graphics.PathEffect;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.RectF;
 import android.graphics.Shader;
+import android.graphics.Xfermode;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -32,7 +34,9 @@ import com.board.draw.util.DateUtil;
 import com.board.draw.util.DrawMode;
 import com.board.draw.util.PaintMode;
 import com.board.draw.util.PathUtil;
+import com.board.draw.util.PiUtil;
 import com.board.draw.util.ScreenUtil;
+import com.bumptech.glide.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,11 +47,15 @@ import java.util.List;
 public class CircleDrawingView extends View {
     private Bitmap mBitmap;
     private Canvas mPathCanvas;
+    private Canvas mCircleCanvas;
+    private Canvas mLineCanvas;
     private final Paint mBitmapPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     private float mx, my;
 
     private Paint mPathPaint;
+    //TRIANGLE
+    private Paint mTrianglePaint;
     //圆画笔
     private PathEffect mPathEffect;
     //画笔类型
@@ -64,6 +72,11 @@ public class CircleDrawingView extends View {
     private DashPathEffect dashPathEffect3;
     private DashPathEffect dashPathEffect4;
     private DashPathEffect dashPathEffect5;
+
+    //椭圆
+    private final RectF ovalRectF = new RectF();
+    //矩形RECTANGLE
+    private final RectF rectangleRectF = new RectF();
 
     //本地图片Bitmap
     private Bitmap localBitmap;
@@ -115,7 +128,17 @@ public class CircleDrawingView extends View {
         setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
         mPathPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         initPaintStyle(mPathPaint);
+        initTrianglePaint();
         initPathType();
+    }
+
+    //三角形画笔
+    private void initTrianglePaint() {
+        mTrianglePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mTrianglePaint.setDither(true);
+        mTrianglePaint.setStyle(Paint.Style.STROKE);
+        mTrianglePaint.setStrokeWidth(getBrushSize());
+        mTrianglePaint.setColor(getPaintColor());
     }
 
     private void initPathType() {
@@ -141,6 +164,8 @@ public class CircleDrawingView extends View {
     private void initBitmap() {
         mBitmap = Bitmap.createBitmap(ScreenUtil.getWidth(getContext()), ScreenUtil.getHeight(getContext()), Bitmap.Config.ARGB_8888);
         mPathCanvas = new Canvas(mBitmap);
+        mCircleCanvas = new Canvas(mBitmap);
+        mLineCanvas = new Canvas(mBitmap);
     }
 
     /**
@@ -294,28 +319,19 @@ public class CircleDrawingView extends View {
                 startX = event.getX();
                 startY = event.getY();
 
-                switch (curDrawMode) {
-                    case DRAW_PATH:
-                    default:
-                        if (curPaintMode == PaintMode.PATTERN_PEN) {
-                            //图案笔
-                            mPath = PathUtil.drawStarPath(25);
-                            pathDashPathEffect = new PathDashPathEffect(mPath, 25 * 1.5f, 0, PathDashPathEffect.Style.ROTATE);
-                        } else {
-                            mPath = new Path();
-                        }
-
-                        paths.add(new DrawPath(mPath, getPaintColor(), curPaintMode, false, getBrushSize()));
-                        paints.add(mPathPaint);
-                        mPath.reset();
-
-                        mPath.moveTo(mx, my);
-                        break;
-                    case DRAW_CIRCLE:
-                    case DRAW_STRAIGHT_LINE:
-                        paints.add(mPathPaint);
-                        break;
+                if (curPaintMode == PaintMode.PATTERN_PEN) {
+                    //图案笔
+                    mPath = PathUtil.drawStarPath(25);
+                    pathDashPathEffect = new PathDashPathEffect(mPath, 25 * 1.5f, 0, PathDashPathEffect.Style.ROTATE);
+                } else {
+                    mPath = new Path();
                 }
+
+                paths.add(new DrawPath(mPath, getPaintColor(), curPaintMode, false, getBrushSize()));
+                paints.add(mPathPaint);
+                mPath.reset();
+
+                mPath.moveTo(mx, my);
                 break;
             case MotionEvent.ACTION_MOVE:
                 float x = event.getX();
@@ -333,7 +349,11 @@ public class CircleDrawingView extends View {
                         }
                         break;
                     case DRAW_CIRCLE:
+                    case DRAW_OVAL:
                     case DRAW_STRAIGHT_LINE:
+                    case DRAW_TRIANGLE:
+                    case DRAW_RECTANGLE:
+                    case DRAW_POLYGON:
                         mx = event.getX();
                         my = event.getY();
                         break;
@@ -341,8 +361,40 @@ public class CircleDrawingView extends View {
                 break;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
-                if (curDrawMode == DrawMode.DRAW_PATH) {
-                    mPath.lineTo(mx, my);
+                switch (curDrawMode) {
+                    case DRAW_PATH:
+                        //路径
+                        mPath.lineTo(mx, my);
+                        break;
+                    case DRAW_CIRCLE:
+                        //圆形
+                        mPath.addCircle(Math.abs(mx - (mx - startX) / 2f), Math.abs(my - (my - startY) / 2f), Math.abs((mx - startX) / 2f), Path.Direction.CW);
+                        break;
+                    case DRAW_OVAL:
+                        //椭圆
+                        ovalRectF.set(startX, startY, mx, my);
+                        mPath.addOval(ovalRectF, Path.Direction.CW);
+                        break;
+                    case DRAW_STRAIGHT_LINE:
+                        //直线
+                        mPath.lineTo(mx, my);
+                        break;
+                    case DRAW_TRIANGLE:
+                        //三角形
+                        mPath.moveTo(startX, startY);
+                        mPath.lineTo(startX, my);
+                        mPath.lineTo(mx, my);
+                        mPath.close();
+                        break;
+                    case DRAW_POLYGON:
+                        //多边形
+                        drawPolygonPath(mPath, 6, ScreenUtil.dip2px(getContext(), 30));
+                        break;
+                    case DRAW_RECTANGLE:
+                        //矩形
+                        rectangleRectF.set(startX, startY, mx, my);
+                        mPath.addRect(rectangleRectF, Path.Direction.CW);
+                        break;
                 }
                 break;
         }
@@ -363,6 +415,30 @@ public class CircleDrawingView extends View {
         BitmapUtil.saveBitmapToLocal(context, this, fileName.concat("-").concat(DateUtil.timeToDate()));
     }
 
+    //绘制多边形
+    private void drawPolygonPath(Path path, int count, int radius) {
+        //计算单元角度
+        float unitAngle = (float) (Math.PI * 2 / count);
+        //初始角度
+        float angle = 0;
+        float xLength, yLength;
+//        path.moveTo(startX, startY);
+        //遍历计算点，并lineTo()绘制路径
+        for (int i = 0; i < count; i++) {
+            if (angle <= unitAngle) {
+                xLength = (float) (radius * Math.cos(unitAngle));
+                yLength = (float) (radius * Math.sin(unitAngle));
+            } else {
+                xLength = (float) (radius * Math.cos(angle));
+                yLength = (float) (radius * Math.sin(angle));
+            }
+            //绘制路径
+            path.lineTo(startX + xLength, startY - yLength);
+            angle += unitAngle;
+        }
+        path.close();
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -370,6 +446,8 @@ public class CircleDrawingView extends View {
             return;
         }
         mPathCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+        mCircleCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+        mLineCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         canvas.save();
         //绘制带有效果的路径
         if (paths.size() > 0) {
@@ -449,45 +527,80 @@ public class CircleDrawingView extends View {
                         break;
                 }
 
-                //画布类型
-                if (curDrawMode == DrawMode.DRAW_PATH) {//路径
+                if (curDrawMode == DrawMode.DRAW_RECTANGLE) {
+                    mPathCanvas.drawRect(rectangleRectF, mTrianglePaint);
+                } else if (curDrawMode == DrawMode.DRAW_TRIANGLE ||
+                        curDrawMode == DrawMode.DRAW_POLYGON) {
+                    mPathCanvas.drawPath(drawPath.getPath(), this.mTrianglePaint);
+                } else {
                     mPathCanvas.drawPath(drawPath.getPath(), this.mPathPaint);
                 }
             }
+
+            switch (curDrawMode) {
+                case DRAW_CIRCLE:
+                    //圆
+                    mPathCanvas.drawCircle(Math.abs(mx - (mx - startX) / 2f), Math.abs(my - (my - startY) / 2f), Math.abs((mx - startX) / 2f), mPathPaint);
+                    break;
+                case DRAW_OVAL:
+                    ovalRectF.set(startX, startY, mx, my);
+                    mPathCanvas.drawOval(ovalRectF, mPathPaint);
+                    break;
+                case DRAW_TRIANGLE:
+                    //三角形
+//                    mPath.moveTo(startX, startY);
+//                    mPath.lineTo(startX, my);
+//                    mPath.lineTo(mx, my);
+//                    mPath.close();
+                    mPathCanvas.drawPath(mPath, mTrianglePaint);
+                    break;
+                case DRAW_RECTANGLE:
+                    //矩形
+                    rectangleRectF.set(startX, startY, mx, my);
+                    mPathCanvas.drawRect(rectangleRectF, mTrianglePaint);
+                    break;
+                case DRAW_STRAIGHT_LINE:
+                    //直线
+                    mPathCanvas.drawLine(startX, startY, mx, my, mPathPaint);
+                    break;
+                case DRAW_POLYGON:
+                    //多边形
+                    drawPolygonPath(mPath, 6, ScreenUtil.dip2px(getContext(), 30));
+                    mPathCanvas.drawPath(mPath, mTrianglePaint);
+                    break;
+            }
+
+        } else {
+            //画布类型
+            switch (curDrawMode) {
+                case DRAW_CIRCLE:
+                    //圆
+                    mCircleCanvas.drawCircle(Math.abs(mx - (mx - startX) / 2f), Math.abs(my - (my - startY) / 2f), Math.abs((mx - startX) / 2f), mPathPaint);
+                    break;
+                case DRAW_OVAL:
+                    ovalRectF.set(startX, startY, mx, my);
+                    mPathCanvas.drawOval(ovalRectF, mTrianglePaint);
+                    break;
+                case DRAW_TRIANGLE:
+                    //三角形
+                    mPathCanvas.drawPath(mPath, mTrianglePaint);
+                    break;
+                case DRAW_RECTANGLE:
+                    //矩形
+                    rectangleRectF.set(startX, startY, mx, my);
+                    mPathCanvas.drawRect(rectangleRectF, mTrianglePaint);
+                    break;
+                case DRAW_STRAIGHT_LINE:
+                    //直线
+                    mLineCanvas.drawLine(startX, startY, mx, my, mPathPaint);
+                    break;
+                case DRAW_POLYGON:
+                    //多边形
+                    drawPolygonPath(mPath, 6, ScreenUtil.dip2px(getContext(), 30));
+                    mPathCanvas.drawPath(mPath, mTrianglePaint);
+                    break;
+            }
         }
-
-        //画布类型
-        switch (curDrawMode) {
-            case DRAW_PATH:
-            default:
-                //路径
-//                mPathCanvas.drawPath(drawPath.getPath(), this.mPathPaint);
-                Log.e("画路径：", "DRAW_PATH");
-                break;
-            case DRAW_CIRCLE:
-                //圆
-                mPathCanvas.drawCircle(Math.abs(mx - (mx - startX) / 2f), Math.abs(my - (my - startY) / 2f), Math.abs((mx - startX) / 2f), mPathPaint);
-                Log.e("画圆：", "DRAW_CIRCLE");
-                break;
-            case DRAW_TRIANGLE:
-                //三角形
-
-                break;
-            case DRAW_RECTANGLE:
-                //矩形
-
-                break;
-            case DRAW_STRAIGHT_LINE:
-                //直线
-                mPathCanvas.drawLine(startX, startY, mx, my, mPathPaint);
-                Log.e("画直线：", "DRAW_STRAIGHT_LINE");
-                break;
-            case DRAW_POLYGON:
-                //多边形
-
-                break;
-        }
-
         canvas.drawBitmap(mBitmap, 0f, 0f, this.mBitmapPaint);
         canvas.restore();
     }
