@@ -101,6 +101,7 @@ public class DrawingBoardActivity extends BaseActivity implements View.OnClickLi
         list.add(buildCanvasType(5, R.mipmap.ic_shape_hexagon, "多边形", false));
         list.add(buildCanvasType(6, R.mipmap.ic_shape_rectangle, "矩形", false));
         list.add(buildCanvasType(7, R.mipmap.ic_shape_oval, "椭圆", false));
+        list.add(buildCanvasType(8, R.mipmap.ic_little_yellow_chicken_1, "小黄鸡", false));
         return list;
     }
 
@@ -203,6 +204,10 @@ public class DrawingBoardActivity extends BaseActivity implements View.OnClickLi
             case 7:
                 //椭圆
                 cornerPathEffectView.setCurDrawMode(DrawMode.DRAW_OVAL);
+                break;
+            case 8:
+                //本地图片
+                cornerPathEffectView.setCurDrawMode(DrawMode.DRAW_BITMAP);
                 break;
         }
     }

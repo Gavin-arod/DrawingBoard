@@ -20,6 +20,7 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.Xfermode;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -34,9 +35,7 @@ import com.board.draw.util.DateUtil;
 import com.board.draw.util.DrawMode;
 import com.board.draw.util.PaintMode;
 import com.board.draw.util.PathUtil;
-import com.board.draw.util.PiUtil;
 import com.board.draw.util.ScreenUtil;
-import com.bumptech.glide.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -130,6 +129,7 @@ public class CircleDrawingView extends View {
         initPaintStyle(mPathPaint);
         initTrianglePaint();
         initPathType();
+        getLocalBitmap(R.mipmap.ic_little_yellow_chicken_1);
     }
 
     //三角形画笔
@@ -158,7 +158,7 @@ public class CircleDrawingView extends View {
         //虚线5
         dashPathEffect5 = new DashPathEffect(interval5, 0);
         //图片笔
-        bitmapShader = getLocalBitmap(R.mipmap.ic_flower);
+        bitmapShader = getBitmapShader(R.mipmap.ic_little_yellow_chicken_1);
     }
 
     private void initBitmap() {
@@ -171,9 +171,16 @@ public class CircleDrawingView extends View {
     /**
      * 得到本地图片的bitmapShader对象
      */
-    public BitmapShader getLocalBitmap(int imageResId) {
+    public BitmapShader getBitmapShader(int imageResId) {
         localBitmap = BitmapFactory.decodeResource(getResources(), imageResId);
         return new BitmapShader(localBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+    }
+
+    /**
+     * 得到本地图片bitmap对象
+     */
+    public void getLocalBitmap(int bitmapResId) {
+        localBitmap = BitmapFactory.decodeResource(getResources(), bitmapResId);
     }
 
     /**
@@ -328,7 +335,13 @@ public class CircleDrawingView extends View {
                 }
 
                 paths.add(new DrawPath(mPath, getPaintColor(), curPaintMode, false, getBrushSize()));
-                paints.add(mPathPaint);
+                if (curDrawMode == DrawMode.DRAW_TRIANGLE ||
+                        curDrawMode == DrawMode.DRAW_RECTANGLE ||
+                        curDrawMode == DrawMode.DRAW_POLYGON) {
+                    paints.add(mTrianglePaint);
+                } else {
+                    paints.add(mPathPaint);
+                }
                 mPath.reset();
 
                 mPath.moveTo(mx, my);
@@ -357,6 +370,12 @@ public class CircleDrawingView extends View {
                         mx = event.getX();
                         my = event.getY();
                         break;
+                    case DRAW_BITMAP:
+                        Log.e("DRAW_BITMAP-1111", "画小黄鸡");
+                        mx = event.getX();
+                        my = event.getY();
+                        getLocalBitmap(R.mipmap.ic_little_yellow_chicken_1);
+                        break;
                 }
                 break;
             case MotionEvent.ACTION_CANCEL:
@@ -368,12 +387,24 @@ public class CircleDrawingView extends View {
                         break;
                     case DRAW_CIRCLE:
                         //圆形
-                        mPath.addCircle(Math.abs(mx - (mx - startX) / 2f), Math.abs(my - (my - startY) / 2f), Math.abs((mx - startX) / 2f), Path.Direction.CW);
+                        if (mx < startX) {
+                            //逆时针
+                            mPath.addCircle(Math.abs(mx - (mx - startX) / 2f), Math.abs(my - (my - startY) / 2f), Math.abs((mx - startX) / 2f), Path.Direction.CCW);
+                        } else {
+                            //顺时针
+                            mPath.addCircle(Math.abs(mx - (mx - startX) / 2f), Math.abs(my - (my - startY) / 2f), Math.abs((mx - startX) / 2f), Path.Direction.CW);
+                        }
                         break;
                     case DRAW_OVAL:
                         //椭圆
                         ovalRectF.set(startX, startY, mx, my);
-                        mPath.addOval(ovalRectF, Path.Direction.CW);
+                        if (mx < startX) {
+                            //逆时针
+                            mPath.addOval(ovalRectF, Path.Direction.CCW);
+                        } else {
+                            //顺时针
+                            mPath.addOval(ovalRectF, Path.Direction.CW);
+                        }
                         break;
                     case DRAW_STRAIGHT_LINE:
                         //直线
@@ -388,12 +419,22 @@ public class CircleDrawingView extends View {
                         break;
                     case DRAW_POLYGON:
                         //多边形
-                        drawPolygonPath(mPath, 6, ScreenUtil.dip2px(getContext(), 30));
+                        drawPolygonPath(mPath, 6, (int) Math.abs(mx - startX));
                         break;
                     case DRAW_RECTANGLE:
                         //矩形
                         rectangleRectF.set(startX, startY, mx, my);
-                        mPath.addRect(rectangleRectF, Path.Direction.CW);
+                        if (mx < startX) {
+                            //逆时针
+                            mPath.addRect(rectangleRectF, Path.Direction.CCW);
+                        } else {
+                            //顺时针
+                            mPath.addRect(rectangleRectF, Path.Direction.CW);
+                        }
+                        break;
+                    case DRAW_BITMAP:
+                        getLocalBitmap(R.mipmap.ic_little_yellow_chicken_1);
+                        Log.e("DRAW_BITMAP-2222", "画小黄鸡");
                         break;
                 }
                 break;
@@ -439,6 +480,12 @@ public class CircleDrawingView extends View {
         path.close();
     }
 
+    private void buildPaint(Paint paint, PathEffect pathEffect, MaskFilter maskFilter, Xfermode xfermode) {
+        paint.setPathEffect(pathEffect);
+        paint.setMaskFilter(maskFilter);
+        paint.setXfermode(xfermode);
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -454,72 +501,59 @@ public class CircleDrawingView extends View {
             for (DrawPath drawPath : paths) {
                 mPathPaint.setStrokeWidth(drawPath.getBrushSize());
                 mPathPaint.setColor(drawPath.getColor());
+                mTrianglePaint.setStrokeWidth(drawPath.getBrushSize());
+                mTrianglePaint.setColor(drawPath.getColor());
                 //画笔类型
                 switch (drawPath.getDrawingMode()) {
                     case ERASER:
                         //橡皮擦
-                        mPathPaint.setXfermode(porterDuffXfermode);
-
-                        mPathPaint.setMaskFilter(null);
-                        mPathPaint.setPathEffect(mPathEffect);
+                        buildPaint(mPathPaint, mPathEffect, null, porterDuffXfermode);
+                        buildPaint(mTrianglePaint, mPathEffect, null, porterDuffXfermode);
                         break;
                     case PENCIL:
                         //铅笔
-                        mPathPaint.setPathEffect(mPathEffect);
-
-                        mPathPaint.setXfermode(null);
-                        mPathPaint.setMaskFilter(null);
+                        buildPaint(mPathPaint, mPathEffect, null, null);
+                        buildPaint(mTrianglePaint, mPathEffect, null, null);
                         break;
                     case HIGHLIGHTER:
                         //荧光笔
-                        mPathPaint.setMaskFilter(blurMaskFilter);
-
-                        mPathPaint.setXfermode(null);
-                        mPathPaint.setPathEffect(mPathEffect);
+                        buildPaint(mPathPaint, mPathEffect, blurMaskFilter, null);
+                        buildPaint(mTrianglePaint, mPathEffect, blurMaskFilter, null);
                         break;
                     case PATTERN_PEN:
                         //图案笔
-                        mPathPaint.setPathEffect(pathDashPathEffect);
-
-                        mPathPaint.setXfermode(null);
-                        mPathPaint.setMaskFilter(null);
+                        buildPaint(mPathPaint, pathDashPathEffect, null, null);
+                        buildPaint(mTrianglePaint, pathDashPathEffect, null, null);
                         break;
                     case EQUAL_DASHED_LINE:
                         //虚线笔1
-                        mPathPaint.setPathEffect(dashPathEffect1);
-
-                        mPathPaint.setXfermode(null);
-                        mPathPaint.setMaskFilter(null);
+                        buildPaint(mPathPaint, dashPathEffect1, null, null);
+                        buildPaint(mTrianglePaint, dashPathEffect1, null, null);
                         break;
                     case UNEQUAL_DASHED_LINE:
                         //虚线笔2
-                        mPathPaint.setPathEffect(dashPathEffect2);
-
-                        mPathPaint.setXfermode(null);
-                        mPathPaint.setMaskFilter(null);
+                        buildPaint(mPathPaint, dashPathEffect2, null, null);
+                        buildPaint(mTrianglePaint, dashPathEffect2, null, null);
                         break;
                     case CIRCLE_LINE_DASHED_LINE:
                         //虚线笔3
-                        mPathPaint.setPathEffect(dashPathEffect3);
-
-                        mPathPaint.setXfermode(null);
-                        mPathPaint.setMaskFilter(null);
+                        buildPaint(mPathPaint, dashPathEffect3, null, null);
+                        buildPaint(mTrianglePaint, dashPathEffect3, null, null);
                         break;
                     case ALL_CIRCLE_DASHED_LINE:
                         //虚线4
-                        mPathPaint.setPathEffect(dashPathEffect4);
-
-                        mPathPaint.setXfermode(null);
-                        mPathPaint.setMaskFilter(null);
+                        buildPaint(mPathPaint, dashPathEffect4, null, null);
+                        buildPaint(mTrianglePaint, dashPathEffect4, null, null);
                         break;
                     case FIVE_DASHED_LINE:
                         //虚线5
-                        mPathPaint.setPathEffect(dashPathEffect5);
-
-                        mPathPaint.setXfermode(null);
-                        mPathPaint.setMaskFilter(null);
+                        buildPaint(mPathPaint, dashPathEffect5, null, null);
+                        buildPaint(mTrianglePaint, dashPathEffect5, null, null);
                         break;
                     case FLOWER_PEN:
+
+                        buildPaint(mPathPaint, null, null, null);
+                        buildPaint(mTrianglePaint, null, null, null);
 
                         mPathPaint.setPathEffect(null);
                         mPathPaint.setXfermode(null);
@@ -527,14 +561,17 @@ public class CircleDrawingView extends View {
                         break;
                 }
 
-                if (curDrawMode == DrawMode.DRAW_RECTANGLE) {
-                    mPathCanvas.drawRect(rectangleRectF, mTrianglePaint);
-                } else if (curDrawMode == DrawMode.DRAW_TRIANGLE ||
-                        curDrawMode == DrawMode.DRAW_POLYGON) {
+                if (curDrawMode == DrawMode.DRAW_TRIANGLE) {
                     mPathCanvas.drawPath(drawPath.getPath(), this.mTrianglePaint);
+                } else if (curDrawMode == DrawMode.DRAW_BITMAP) {
+                    getLocalBitmap(R.mipmap.ic_little_yellow_chicken_1);
+                    mPathCanvas.drawBitmap(localBitmap, mx, my, mPathPaint);
+                    canvas.save();
                 } else {
                     mPathCanvas.drawPath(drawPath.getPath(), this.mPathPaint);
                 }
+
+                Log.e("DRAW_BITMAP-5555", "画小黄鸡");
             }
 
             switch (curDrawMode) {
@@ -565,9 +602,15 @@ public class CircleDrawingView extends View {
                     break;
                 case DRAW_POLYGON:
                     //多边形
-                    drawPolygonPath(mPath, 6, ScreenUtil.dip2px(getContext(), 30));
+//                    drawPolygonPath(mPath, 6, (int) Math.abs(mx - startX));
                     mPathCanvas.drawPath(mPath, mTrianglePaint);
                     break;
+//                case DRAW_BITMAP:
+//                    //本地图片
+//                    getLocalBitmap(R.mipmap.ic_little_yellow_chicken_1);
+//                    mPathCanvas.drawBitmap(localBitmap, mx, my, mPathPaint);
+//                    Log.e("DRAW_BITMAP-3333", "画小黄鸡");
+//                    break;
             }
 
         } else {
@@ -578,6 +621,7 @@ public class CircleDrawingView extends View {
                     mCircleCanvas.drawCircle(Math.abs(mx - (mx - startX) / 2f), Math.abs(my - (my - startY) / 2f), Math.abs((mx - startX) / 2f), mPathPaint);
                     break;
                 case DRAW_OVAL:
+                    //椭圆
                     ovalRectF.set(startX, startY, mx, my);
                     mPathCanvas.drawOval(ovalRectF, mTrianglePaint);
                     break;
@@ -596,9 +640,14 @@ public class CircleDrawingView extends View {
                     break;
                 case DRAW_POLYGON:
                     //多边形
-                    drawPolygonPath(mPath, 6, ScreenUtil.dip2px(getContext(), 30));
+//                    drawPolygonPath(mPath, 6, (int) Math.abs(mx - startX));
                     mPathCanvas.drawPath(mPath, mTrianglePaint);
                     break;
+//                case DRAW_BITMAP:
+//                    getLocalBitmap(R.mipmap.ic_little_yellow_chicken_1);
+//                    mPathCanvas.drawBitmap(localBitmap, mx, my, mPathPaint);
+//                    Log.e("DRAW_BITMAP-4444", "画小黄鸡");
+//                    break;
             }
         }
         canvas.drawBitmap(mBitmap, 0f, 0f, this.mBitmapPaint);

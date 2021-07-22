@@ -12,6 +12,7 @@ public enum DrawMode {
      * DRAW_TRIANGLE               三角形
      * DRAW_POLYGON                多边形
      * DRAW_RECTANGLE              矩形
+     * DRAW_BITMAP                 本地图片
      */
     DRAW_PATH,
     DRAW_STRAIGHT_LINE,
@@ -19,5 +20,6 @@ public enum DrawMode {
     DRAW_OVAL,
     DRAW_TRIANGLE,
     DRAW_POLYGON,
-    DRAW_RECTANGLE
+    DRAW_RECTANGLE,
+    DRAW_BITMAP
 }
