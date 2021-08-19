@@ -2,6 +2,7 @@ package com.board.draw.dialog;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -37,6 +38,9 @@ public class SelectCanvasBackgroundDialog extends BaseDialogView implements Item
         setOutSideTouchable(false);
         setContentView(R.layout.dialog_select_background);
         imagesList.addAll(list);
+        //最后一个item是添加本地图片
+        Bitmap endAddBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.mipmap.ic_add);
+        imagesList.add(endAddBitmap);
         this.itemClickListener = listener;
     }
 
@@ -73,5 +77,10 @@ public class SelectCanvasBackgroundDialog extends BaseDialogView implements Item
     public void itemClick(Bitmap bitmap) {
         itemClickListener.itemClick(bitmap);
         dismiss();
+    }
+
+    @Override
+    public void openLocalAlbum() {
+        itemClickListener.openLocalAlbum();
     }
 }

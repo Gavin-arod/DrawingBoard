@@ -15,7 +15,7 @@
         <activity
             android:name=".ui.activity.SplashActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|locale|screenSize|navigation"
-            android:screenOrientation="sensor"
+            android:screenOrientation="landscape"
             android:theme="@style/Custom.Theme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,7 +31,7 @@
         <activity
             android:name=".ui.activity.AboutUsActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|locale|screenSize|navigation"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="landscape" />
         <activity
             android:name=".ui.activity.HomeActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|locale|screenSize|navigation"
@@ -40,7 +40,7 @@
         <activity
             android:name=".ui.activity.LocalPictureBookActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|locale|screenSize|navigation"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="landscape" />
 
         <activity
             android:name=".ui.activity.ShowPicActivity"

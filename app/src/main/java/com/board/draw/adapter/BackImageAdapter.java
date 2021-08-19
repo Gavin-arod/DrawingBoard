@@ -46,8 +46,14 @@ public class BackImageAdapter extends RecyclerView.Adapter<BackImageHolder> {
                 .load(bitmap)
                 .into(holder.getBackImageView());
 
-        holder.itemView.setOnClickListener(v ->
-                itemClickListener.itemClick(bitmap));
+        holder.itemView.setOnClickListener(v -> {
+            if (position == data.size() - 1) {
+                //打开本地相册
+                itemClickListener.openLocalAlbum();
+            } else {
+                itemClickListener.itemClick(bitmap);
+            }
+        });
     }
 
     @Override

@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import com.board.draw.dialog.SaveImageDialog;
 import com.board.draw.dialog.SelectBrushDialog;
 import com.board.draw.dialog.SelectCanvasBackgroundDialog;
 import com.board.draw.dialog.SelectCanvasModeDialog;
+import com.board.draw.engine.GlideEngine;
 import com.board.draw.impl.CanvasTypeClickListener;
 import com.board.draw.impl.ItemClickListener;
 import com.board.draw.impl.OnClearScreenListener;
@@ -29,6 +31,10 @@ import com.board.draw.util.AssetsUtil;
 import com.board.draw.util.DrawMode;
 import com.board.draw.util.PaintMode;
 import com.board.draw.util.SPUtil;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureMimeType;
+import com.luck.picture.lib.entity.LocalMedia;
+import com.luck.picture.lib.listener.OnResultCallbackListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -292,6 +298,30 @@ public class DrawingBoardActivity extends BaseActivity implements View.OnClickLi
     public void itemClick(Bitmap bitmap) {
         BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
         cornerPathEffectView.setBackground(drawable);
+    }
+
+    //打开本地相册
+    @Override
+    public void openLocalAlbum() {
+        PictureSelector.create(this)
+                .openCamera(PictureMimeType.ofImage())
+                .maxSelectNum(1)
+                .isBmp(true)
+                .isPreviewImage(true)
+                .imageEngine(GlideEngine.createGlideEngine())
+                .forResult(new OnResultCallbackListener<LocalMedia>() {
+                    @Override
+                    public void onResult(List<LocalMedia> result) {
+                        // 结果回调
+                        Log.e("返回结果：", result.size() + result.get(0).getPath());
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        // 取消
+
+                    }
+                });
     }
 
     /**

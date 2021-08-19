@@ -387,24 +387,12 @@ public class CircleDrawingView extends View {
                         break;
                     case DRAW_CIRCLE:
                         //圆形
-                        if (mx < startX) {
-                            //逆时针
-                            mPath.addCircle(Math.abs(mx - (mx - startX) / 2f), Math.abs(my - (my - startY) / 2f), Math.abs((mx - startX) / 2f), Path.Direction.CCW);
-                        } else {
-                            //顺时针
-                            mPath.addCircle(Math.abs(mx - (mx - startX) / 2f), Math.abs(my - (my - startY) / 2f), Math.abs((mx - startX) / 2f), Path.Direction.CW);
-                        }
+                        mPath.addCircle(Math.abs(mx - (mx - startX) / 2f), Math.abs(my - (my - startY) / 2f), Math.abs((mx - startX) / 2f), Path.Direction.CW);
                         break;
                     case DRAW_OVAL:
                         //椭圆
                         ovalRectF.set(startX, startY, mx, my);
-                        if (mx < startX) {
-                            //逆时针
-                            mPath.addOval(ovalRectF, Path.Direction.CCW);
-                        } else {
-                            //顺时针
-                            mPath.addOval(ovalRectF, Path.Direction.CW);
-                        }
+                        mPath.addOval(ovalRectF, Path.Direction.CW);
                         break;
                     case DRAW_STRAIGHT_LINE:
                         //直线
@@ -412,9 +400,8 @@ public class CircleDrawingView extends View {
                         break;
                     case DRAW_TRIANGLE:
                         //三角形
-                        mPath.moveTo(startX, startY);
-                        mPath.lineTo(startX, my);
                         mPath.lineTo(mx, my);
+                        mPath.lineTo(mx, startY);
                         mPath.close();
                         break;
                     case DRAW_POLYGON:
@@ -424,13 +411,7 @@ public class CircleDrawingView extends View {
                     case DRAW_RECTANGLE:
                         //矩形
                         rectangleRectF.set(startX, startY, mx, my);
-                        if (mx < startX) {
-                            //逆时针
-                            mPath.addRect(rectangleRectF, Path.Direction.CCW);
-                        } else {
-                            //顺时针
-                            mPath.addRect(rectangleRectF, Path.Direction.CW);
-                        }
+                        mPath.addRect(rectangleRectF, Path.Direction.CW);
                         break;
                     case DRAW_BITMAP:
                         getLocalBitmap(R.mipmap.ic_little_yellow_chicken_1);
@@ -463,18 +444,23 @@ public class CircleDrawingView extends View {
         //初始角度
         float angle = 0;
         float xLength, yLength;
-//        path.moveTo(startX, startY);
         //遍历计算点，并lineTo()绘制路径
         for (int i = 0; i < count; i++) {
             if (angle <= unitAngle) {
                 xLength = (float) (radius * Math.cos(unitAngle));
                 yLength = (float) (radius * Math.sin(unitAngle));
+
+                Log.e("绘制11：", "x=" + unitAngle + ", y=" + unitAngle);
             } else {
                 xLength = (float) (radius * Math.cos(angle));
                 yLength = (float) (radius * Math.sin(angle));
+
+                Log.e("绘制22：", "x=" + angle + ", y=" + angle);
             }
             //绘制路径
-            path.lineTo(startX + xLength, startY - yLength);
+            float disX = startX + xLength;
+            float disY = startY + yLength;
+            path.lineTo(disX, disY);
             angle += unitAngle;
         }
         path.close();
@@ -551,17 +537,13 @@ public class CircleDrawingView extends View {
                         buildPaint(mTrianglePaint, dashPathEffect5, null, null);
                         break;
                     case FLOWER_PEN:
-
                         buildPaint(mPathPaint, null, null, null);
                         buildPaint(mTrianglePaint, null, null, null);
-
-                        mPathPaint.setPathEffect(null);
-                        mPathPaint.setXfermode(null);
-                        mPathPaint.setMaskFilter(null);
                         break;
                 }
 
-                if (curDrawMode == DrawMode.DRAW_TRIANGLE) {
+                if (curDrawMode == DrawMode.DRAW_TRIANGLE ||
+                        curDrawMode == DrawMode.DRAW_POLYGON) {
                     mPathCanvas.drawPath(drawPath.getPath(), this.mTrianglePaint);
                 } else if (curDrawMode == DrawMode.DRAW_BITMAP) {
                     getLocalBitmap(R.mipmap.ic_little_yellow_chicken_1);
@@ -585,11 +567,8 @@ public class CircleDrawingView extends View {
                     break;
                 case DRAW_TRIANGLE:
                     //三角形
-//                    mPath.moveTo(startX, startY);
-//                    mPath.lineTo(startX, my);
-//                    mPath.lineTo(mx, my);
-//                    mPath.close();
                     mPathCanvas.drawPath(mPath, mTrianglePaint);
+                    Log.e("绘制三角形1：", "DRAW_TRIANGLE");
                     break;
                 case DRAW_RECTANGLE:
                     //矩形
@@ -602,7 +581,6 @@ public class CircleDrawingView extends View {
                     break;
                 case DRAW_POLYGON:
                     //多边形
-//                    drawPolygonPath(mPath, 6, (int) Math.abs(mx - startX));
                     mPathCanvas.drawPath(mPath, mTrianglePaint);
                     break;
 //                case DRAW_BITMAP:
@@ -628,6 +606,7 @@ public class CircleDrawingView extends View {
                 case DRAW_TRIANGLE:
                     //三角形
                     mPathCanvas.drawPath(mPath, mTrianglePaint);
+                    Log.e("绘制三角形2：", "DRAW_TRIANGLE");
                     break;
                 case DRAW_RECTANGLE:
                     //矩形
@@ -640,7 +619,6 @@ public class CircleDrawingView extends View {
                     break;
                 case DRAW_POLYGON:
                     //多边形
-//                    drawPolygonPath(mPath, 6, (int) Math.abs(mx - startX));
                     mPathCanvas.drawPath(mPath, mTrianglePaint);
                     break;
 //                case DRAW_BITMAP:

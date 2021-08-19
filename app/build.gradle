@@ -86,10 +86,12 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.2.0'
     //沉浸式状态栏
     implementation 'com.gyf.immersionbar:immersionbar:3.0.0'
+    //图片选择器
+    implementation 'io.github.lucksiege:pictureselector:v2.7.3-rc06'
 }
 
 static def getProductName() {
-    return "晓画板"
+    return "XiaoHuaBan"
 }
 
 static def releaseApkTime() {
