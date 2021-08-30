@@ -81,8 +81,6 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.2.0'
     //沉浸式状态栏
     implementation 'com.gyf.immersionbar:immersionbar:3.0.0'
-    //图片选择器
-    implementation 'com.github.donkingliang:ImageSelector:2.2.1'
 }
 
 static def productName() {

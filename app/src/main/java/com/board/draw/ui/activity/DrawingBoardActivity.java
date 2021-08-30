@@ -1,12 +1,13 @@
 package com.board.draw.ui.activity;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +25,7 @@ import com.board.draw.impl.CanvasTypeClickListener;
 import com.board.draw.impl.ItemClickListener;
 import com.board.draw.impl.OnClearScreenListener;
 import com.board.draw.impl.SaveImageLocalListener;
+import com.board.draw.impl.SelectImageListener;
 import com.board.draw.ui.activity.base.BaseActivity;
 import com.board.draw.ui.view.CircleDrawingView;
 import com.board.draw.ui.view.VirtualColorSeekBar;
@@ -31,14 +33,12 @@ import com.board.draw.util.AssetsUtil;
 import com.board.draw.util.DrawMode;
 import com.board.draw.util.PaintMode;
 import com.board.draw.util.SPUtil;
-import com.donkingliang.imageselector.utils.ImageSelector;
-import com.donkingliang.imageselector.utils.ImageUtil;
-import com.donkingliang.imageselector.utils.UriUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,13 +47,11 @@ import java.util.List;
  */
 public class DrawingBoardActivity extends BaseActivity implements View.OnClickListener, ItemClickListener,
         VirtualColorSeekBar.OnStateChangeListener, SaveImageLocalListener, CanvasTypeClickListener,
-        OnClearScreenListener, ColorChooserDialog.ColorCallback {
+        OnClearScreenListener, ColorChooserDialog.ColorCallback, SelectImageListener {
     private CircleDrawingView cornerPathEffectView;
     private List<Bitmap> imagesList;
     //画布类型集合
     private final List<CanvasType> canvasTypeList = new ArrayList<>();
-
-    private static final int REQUEST_CODE_PHOTO = 100;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,6 +63,8 @@ public class DrawingBoardActivity extends BaseActivity implements View.OnClickLi
 
         cornerPathEffectView = findViewById(R.id.corner_path_view);
         cornerPathEffectView.setRoundedCorner(300);
+
+        setSelectImageListener(this);
 
         //获取本地图片列表
         if (imagesList == null) {
@@ -304,25 +304,25 @@ public class DrawingBoardActivity extends BaseActivity implements View.OnClickLi
     //打开本地相册
     @Override
     public void openLocalAlbum() {
-        ImageSelector.builder()
-                .useCamera(false)
-                .setSingle(true)
-                .start(this, REQUEST_CODE_PHOTO);
+        launcher.launch("open");
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_PHOTO && data != null) {
-            //获取选择器返回的数据
-            ArrayList<String> images = data.getStringArrayListExtra(ImageSelector.SELECT_RESULT);
-            //图片链接转uri
-            Uri uri = UriUtils.getImageContentUri(DrawingBoardActivity.this, images.get(0));
-            Bitmap bitmap = ImageUtil.getBitmapFromUri(DrawingBoardActivity.this, uri);
+    public void selectLocalResult(Uri pathUri) {
+        //图片链接转uri
+        if (pathUri == null) {
+            Toast.makeText(DrawingBoardActivity.this, "请重新选择", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Bitmap bitmap;
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), pathUri);
             if (null != cornerPathEffectView) {
                 BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
-                cornerPathEffectView.setBackground(drawable);
+                cornerPathEffectView.setBackgroundResource(pathUri.hashCode());
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
