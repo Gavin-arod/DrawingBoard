@@ -16,13 +16,13 @@ public class ImageLoaderUtils {
                 return isDestroy(activity);
             }
         }
-        return false;
+        return true;
     }
 
     private static boolean isDestroy(Activity activity) {
         if (activity == null) {
-            return true;
+            return false;
         }
-        return activity.isFinishing() || activity.isDestroyed();
+        return !activity.isFinishing() && !activity.isDestroyed();
     }
 }

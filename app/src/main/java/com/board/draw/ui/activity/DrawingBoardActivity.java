@@ -1,10 +1,11 @@
 package com.board.draw.ui.activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -19,7 +20,6 @@ import com.board.draw.dialog.SaveImageDialog;
 import com.board.draw.dialog.SelectBrushDialog;
 import com.board.draw.dialog.SelectCanvasBackgroundDialog;
 import com.board.draw.dialog.SelectCanvasModeDialog;
-import com.board.draw.engine.GlideEngine;
 import com.board.draw.impl.CanvasTypeClickListener;
 import com.board.draw.impl.ItemClickListener;
 import com.board.draw.impl.OnClearScreenListener;
@@ -31,10 +31,9 @@ import com.board.draw.util.AssetsUtil;
 import com.board.draw.util.DrawMode;
 import com.board.draw.util.PaintMode;
 import com.board.draw.util.SPUtil;
-import com.luck.picture.lib.PictureSelector;
-import com.luck.picture.lib.config.PictureMimeType;
-import com.luck.picture.lib.entity.LocalMedia;
-import com.luck.picture.lib.listener.OnResultCallbackListener;
+import com.donkingliang.imageselector.utils.ImageSelector;
+import com.donkingliang.imageselector.utils.ImageUtil;
+import com.donkingliang.imageselector.utils.UriUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -53,6 +52,8 @@ public class DrawingBoardActivity extends BaseActivity implements View.OnClickLi
     private List<Bitmap> imagesList;
     //画布类型集合
     private final List<CanvasType> canvasTypeList = new ArrayList<>();
+
+    private static final int REQUEST_CODE_PHOTO = 100;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -303,25 +304,26 @@ public class DrawingBoardActivity extends BaseActivity implements View.OnClickLi
     //打开本地相册
     @Override
     public void openLocalAlbum() {
-        PictureSelector.create(this)
-                .openCamera(PictureMimeType.ofImage())
-                .maxSelectNum(1)
-                .isBmp(true)
-                .isPreviewImage(true)
-                .imageEngine(GlideEngine.createGlideEngine())
-                .forResult(new OnResultCallbackListener<LocalMedia>() {
-                    @Override
-                    public void onResult(List<LocalMedia> result) {
-                        // 结果回调
-                        Log.e("返回结果：", result.size() + result.get(0).getPath());
-                    }
+        ImageSelector.builder()
+                .useCamera(false)
+                .setSingle(true)
+                .start(this, REQUEST_CODE_PHOTO);
+    }
 
-                    @Override
-                    public void onCancel() {
-                        // 取消
-
-                    }
-                });
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_PHOTO && data != null) {
+            //获取选择器返回的数据
+            ArrayList<String> images = data.getStringArrayListExtra(ImageSelector.SELECT_RESULT);
+            //图片链接转uri
+            Uri uri = UriUtils.getImageContentUri(DrawingBoardActivity.this, images.get(0));
+            Bitmap bitmap = ImageUtil.getBitmapFromUri(DrawingBoardActivity.this, uri);
+            if (null != cornerPathEffectView) {
+                BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
+                cornerPathEffectView.setBackground(drawable);
+            }
+        }
     }
 
     /**
