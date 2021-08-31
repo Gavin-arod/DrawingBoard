@@ -22,7 +22,7 @@
         <activity
             android:name=".ui.activity.SplashActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|locale|screenSize|navigation"
-            android:screenOrientation="landscape"
+            android:screenOrientation="portrait"
             android:theme="@style/Custom.Theme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,17 +31,16 @@
             </intent-filter>
         </activity>
         <activity
-
             android:name=".ui.activity.DrawingBoardActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|locale|screenSize|navigation"
             android:screenOrientation="landscape" />
         <activity
             android:name=".ui.activity.AboutUsActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|locale|screenSize|navigation"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="sensor" />
         <activity
             android:name=".ui.activity.HomeActivity"
-            android:configChanges="orientation|keyboard|keyboardHidden|locale|screenSize|navigation"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             android:screenOrientation="landscape" />
 
         <activity

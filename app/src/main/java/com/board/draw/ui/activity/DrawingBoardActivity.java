@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.board.draw.R;
@@ -27,6 +28,7 @@ import com.board.draw.impl.OnClearScreenListener;
 import com.board.draw.impl.SaveImageLocalListener;
 import com.board.draw.impl.SelectImageListener;
 import com.board.draw.ui.activity.base.BaseActivity;
+import com.board.draw.ui.view.BackgroundView;
 import com.board.draw.ui.view.CircleDrawingView;
 import com.board.draw.ui.view.VirtualColorSeekBar;
 import com.board.draw.util.AssetsUtil;
@@ -49,6 +51,7 @@ public class DrawingBoardActivity extends BaseActivity implements View.OnClickLi
         VirtualColorSeekBar.OnStateChangeListener, SaveImageLocalListener, CanvasTypeClickListener,
         OnClearScreenListener, ColorChooserDialog.ColorCallback, SelectImageListener {
     private CircleDrawingView cornerPathEffectView;
+    private BackgroundView backgroundView;
     private List<Bitmap> imagesList;
     //画布类型集合
     private final List<CanvasType> canvasTypeList = new ArrayList<>();
@@ -60,6 +63,8 @@ public class DrawingBoardActivity extends BaseActivity implements View.OnClickLi
             EventBus.getDefault().register(this);
         }
         setContentView(R.layout.activity_path);
+
+        backgroundView = findViewById(R.id.back_canvas_view);
 
         cornerPathEffectView = findViewById(R.id.corner_path_view);
         cornerPathEffectView.setRoundedCorner(300);
@@ -73,16 +78,22 @@ public class DrawingBoardActivity extends BaseActivity implements View.OnClickLi
 
         //brush size SeekBar view
         VirtualColorSeekBar seekBar = findViewById(R.id.brush_size_seek_bar);
-        seekBar.setProgress(5f);
+        seekBar.setProgress(2f);
         seekBar.setOnStateChangeListener(this);
+
+        AppCompatButton btnShowBackImage = findViewById(R.id.btn_show_back_image);
+        AppCompatButton btnEraser = findViewById(R.id.btn_eraser);
+        AppCompatButton btnClearScreen = findViewById(R.id.btn_clear_screen);
+        AppCompatButton btnShowBrush = findViewById(R.id.btn_show_brush);
+        AppCompatButton btnShowGraphics = findViewById(R.id.btn_show_graphics);
 
         findViewById(R.id.iv_back).setOnClickListener(v -> finish());
         //显示背景图
-        findViewById(R.id.btn_show_back_image).setOnClickListener(this);
+        btnShowBackImage.setOnClickListener(this);
         //橡皮擦
-        findViewById(R.id.btn_eraser).setOnClickListener(this);
+        btnEraser.setOnClickListener(this);
         //清屏
-        findViewById(R.id.btn_clear_screen).setOnClickListener(this);
+        btnClearScreen.setOnClickListener(this);
         //保存
         findViewById(R.id.btn_save).setOnClickListener(this);
         //改变笔刷颜色
@@ -92,8 +103,8 @@ public class DrawingBoardActivity extends BaseActivity implements View.OnClickLi
         //恢复
         findViewById(R.id.btn_restore).setOnClickListener(this);
         //brush button
-        findViewById(R.id.btn_show_brush).setOnClickListener(this);
-        findViewById(R.id.btn_show_graphics).setOnClickListener(this);
+        btnShowBrush.setOnClickListener(this);
+        btnShowGraphics.setOnClickListener(this);
 
         canvasTypeList.addAll(initData());
     }
@@ -105,10 +116,10 @@ public class DrawingBoardActivity extends BaseActivity implements View.OnClickLi
         list.add(buildCanvasType(2, R.mipmap.ic_shape_circular, "圆形", false));
         list.add(buildCanvasType(3, R.mipmap.ic_shape_straight, "直线", false));
         list.add(buildCanvasType(4, R.mipmap.ic_shape_triangle, "三角形", false));
-        list.add(buildCanvasType(5, R.mipmap.ic_shape_hexagon, "多边形", false));
+//        list.add(buildCanvasType(5, R.mipmap.ic_shape_hexagon, "多边形", false));
         list.add(buildCanvasType(6, R.mipmap.ic_shape_rectangle, "矩形", false));
         list.add(buildCanvasType(7, R.mipmap.ic_shape_oval, "椭圆", false));
-        list.add(buildCanvasType(8, R.mipmap.ic_little_yellow_chicken_1, "小黄鸡", false));
+//        list.add(buildCanvasType(8, R.mipmap.ic_little_yellow_chicken_1, "小黄鸡", false));
         return list;
     }
 
@@ -212,10 +223,10 @@ public class DrawingBoardActivity extends BaseActivity implements View.OnClickLi
                 //椭圆
                 cornerPathEffectView.setCurDrawMode(DrawMode.DRAW_OVAL);
                 break;
-            case 8:
-                //本地图片
-                cornerPathEffectView.setCurDrawMode(DrawMode.DRAW_BITMAP);
-                break;
+//            case 8:
+//                //本地图片
+//                cornerPathEffectView.setCurDrawMode(DrawMode.DRAW_BITMAP);
+//                break;
         }
     }
 
@@ -275,7 +286,11 @@ public class DrawingBoardActivity extends BaseActivity implements View.OnClickLi
             cornerPathEffectView.restorePath();
         } else if (viewId == R.id.btn_eraser) {
             //eraser
-            cornerPathEffectView.setCurPaintMode(PaintMode.ERASER);
+            if (cornerPathEffectView.getCurPaintMode() == PaintMode.ERASER) {
+                cornerPathEffectView.setCurPaintMode(PaintMode.PENCIL);
+            } else {
+                cornerPathEffectView.setCurPaintMode(PaintMode.ERASER);
+            }
         } else if (viewId == R.id.btn_clear_screen) {
             //clear screen
             ClearScreenDialog clearScreenDialog = new ClearScreenDialog(DrawingBoardActivity.this);
@@ -317,9 +332,8 @@ public class DrawingBoardActivity extends BaseActivity implements View.OnClickLi
         Bitmap bitmap;
         try {
             bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), pathUri);
-            if (null != cornerPathEffectView) {
-                BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
-                cornerPathEffectView.setBackgroundResource(pathUri.hashCode());
+            if (null != backgroundView) {
+                backgroundView.getLocalBitmap(bitmap);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -343,7 +357,7 @@ public class DrawingBoardActivity extends BaseActivity implements View.OnClickLi
     //change brush size
     @Override
     public void onStateChange(View view, float progress) {
-        cornerPathEffectView.setBrushSize(progress / 2f);
+        cornerPathEffectView.setBrushSize(progress / 4f);
     }
 
     @Override

@@ -144,6 +144,16 @@
         app:layout_constraintEnd_toStartOf="@+id/guide_line_vertical_98"
         app:layout_constraintTop_toBottomOf="@+id/guide_line_horizontal_2" />
 
+    <com.board.draw.ui.view.BackgroundView
+        android:id="@+id/back_canvas_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/guide_line_horizontal_88"
+        app:layout_constraintEnd_toStartOf="@+id/guide_line_vertical_96"
+        app:layout_constraintStart_toEndOf="@+id/guide_line_vertical_4"
+        app:layout_constraintTop_toBottomOf="@+id/guide_line_horizontal_08" />
+
     <com.board.draw.ui.view.CircleDrawingView
         android:id="@+id/corner_path_view"
         android:layout_width="0dp"
@@ -175,85 +185,82 @@
         app:layout_constraintTop_toBottomOf="@+id/guide_line_horizontal_88"
         app:layout_constraintVertical_bias="0.0" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_show_brush"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:drawableTop="@mipmap/ic_setting_brush"
-        android:gravity="center"
-        android:text="@string/brush"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="10sp"
+        android:orientation="horizontal"
+        android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="w,2:1"
-        app:layout_constraintEnd_toStartOf="@+id/btn_show_graphics"
-        app:layout_constraintTop_toBottomOf="@+id/guide_line_horizontal_88" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guide_line_horizontal_88">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_show_graphics"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:drawableTop="@mipmap/ic_shape_graphics"
-        android:gravity="center"
-        android:text="@string/graphics"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="w,2:1"
-        app:layout_constraintEnd_toStartOf="@+id/btn_eraser"
-        app:layout_constraintTop_toBottomOf="@+id/guide_line_horizontal_88" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_eraser"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:drawableTop="@mipmap/ic_eraser"
-        android:gravity="center"
-        android:text="@string/eraser"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="w,2:1"
-        app:layout_constraintEnd_toEndOf="@+id/guide_line_vertical_50"
-        app:layout_constraintStart_toStartOf="@+id/guide_line_vertical_50"
-        app:layout_constraintTop_toBottomOf="@+id/guide_line_horizontal_88" />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_show_brush"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:drawableTop="@mipmap/ic_setting_brush"
+                android:gravity="center"
+                android:text="@string/brush"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="10sp" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_clear_screen"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:drawableTop="@mipmap/ic_clear_screen"
-        android:gravity="center"
-        android:text="@string/clear_screen"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="w,2:1"
-        app:layout_constraintStart_toEndOf="@+id/btn_eraser"
-        app:layout_constraintTop_toBottomOf="@+id/guide_line_horizontal_88" />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_show_graphics"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:drawableTop="@mipmap/ic_shape_graphics"
+                android:gravity="center"
+                android:text="@string/graphics"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="10sp" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_show_back_image"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:drawableTop="@mipmap/ic_setting_back_button"
-        android:gravity="center"
-        android:text="@string/select_background_image"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="w,2:1"
-        app:layout_constraintStart_toEndOf="@+id/btn_clear_screen"
-        app:layout_constraintTop_toBottomOf="@+id/guide_line_horizontal_88" />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_eraser"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:drawableTop="@mipmap/ic_eraser"
+                android:gravity="center"
+                android:text="@string/eraser"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="10sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_clear_screen"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:drawableTop="@mipmap/ic_clear_screen"
+                android:gravity="center"
+                android:text="@string/clear_screen"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="10sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_show_back_image"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:drawableTop="@mipmap/ic_setting_back_button"
+                android:gravity="center"
+                android:text="@string/select_background_image"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="10sp" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
