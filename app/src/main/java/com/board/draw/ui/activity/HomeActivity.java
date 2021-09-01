@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.cardview.widget.CardView;
 
 import com.board.draw.R;
 import com.board.draw.ui.activity.base.BaseActivity;
+import com.board.draw.util.AssetsUtil;
 
 /**
  * home page
@@ -23,6 +25,13 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         CardView btnDrawing = findViewById(R.id.cv_drawing);
         CardView btnLocalDrawing = findViewById(R.id.cv_local_image);
         CardView btnAbout = findViewById(R.id.cv_about_us);
+        AppCompatTextView tvDrawing = findViewById(R.id.tv_drawing);
+        AppCompatTextView tvPicBooks = findViewById(R.id.tv_picture_books);
+        AppCompatTextView tvAboutUs = findViewById(R.id.tv_about_us);
+
+        tvDrawing.setTypeface(AssetsUtil.getAssetsFont(HomeActivity.this));
+        tvPicBooks.setTypeface(AssetsUtil.getAssetsFont(HomeActivity.this));
+        tvAboutUs.setTypeface(AssetsUtil.getAssetsFont(HomeActivity.this));
 
         btnDrawing.setOnClickListener(this);
         btnLocalDrawing.setOnClickListener(this);

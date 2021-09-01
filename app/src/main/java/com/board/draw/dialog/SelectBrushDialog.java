@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.animation.Animation;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -14,6 +15,7 @@ import com.board.draw.adapter.BrushSelectAdapter;
 import com.board.draw.constants.BrushType;
 import com.board.draw.dialog.base.BaseDialogView;
 import com.board.draw.impl.OnBrushTypeSelectListener;
+import com.board.draw.util.AssetsUtil;
 import com.board.draw.util.SPUtil;
 import com.board.draw.util.ScreenUtil;
 
@@ -42,6 +44,9 @@ public class SelectBrushDialog extends BaseDialogView implements OnBrushTypeSele
     @Override
     public void onViewCreated(@NonNull View contentView) {
         super.onViewCreated(contentView);
+        AppCompatTextView tvBrushType = contentView.findViewById(R.id.dialog_title);
+        tvBrushType.setTypeface(AssetsUtil.getAssetsFont(getContext()));
+
         RecyclerView rvBrush = contentView.findViewById(R.id.rv_brush_list);
         StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         rvBrush.setLayoutManager(manager);
@@ -93,13 +98,13 @@ public class SelectBrushDialog extends BaseDialogView implements OnBrushTypeSele
 
         BrushType brushType7 = new BrushType();
         brushType7.setType(206);
-        brushType7.setName("图案笔");
+        brushType7.setName("五角星");
         brushTypeList.add(brushType7);
 
-        BrushType brushType8 = new BrushType();
-        brushType8.setType(207);
-        brushType8.setName("图片笔");
-        brushTypeList.add(brushType8);
+//        BrushType brushType8 = new BrushType();
+//        brushType8.setType(207);
+//        brushType8.setName("图片笔");
+//        brushTypeList.add(brushType8);
 
         return brushTypeList;
     }

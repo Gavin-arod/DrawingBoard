@@ -6,10 +6,12 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.board.draw.R;
 import com.board.draw.dialog.base.BaseDialogView;
 import com.board.draw.impl.OnClearScreenListener;
+import com.board.draw.util.AssetsUtil;
 import com.board.draw.util.ScreenUtil;
 
 /**
@@ -34,8 +36,13 @@ public class ClearScreenDialog extends BaseDialogView implements View.OnClickLis
     @Override
     public void onViewCreated(@NonNull View contentView) {
         super.onViewCreated(contentView);
+        AppCompatTextView tvClearTip = contentView.findViewById(R.id.tv_dialog_title);
         AppCompatButton btnCancel = contentView.findViewById(R.id.btn_cancel);
         AppCompatButton btnConfirm = contentView.findViewById(R.id.btn_confirm);
+
+        tvClearTip.setTypeface(AssetsUtil.getAssetsFont(getContext()));
+        btnCancel.setTypeface(AssetsUtil.getAssetsFont(getContext()));
+        btnConfirm.setTypeface(AssetsUtil.getAssetsFont(getContext()));
 
         btnConfirm.setOnClickListener(this);
         btnCancel.setOnClickListener(this);

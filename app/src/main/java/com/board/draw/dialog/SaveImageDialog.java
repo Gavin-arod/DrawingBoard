@@ -10,10 +10,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.board.draw.R;
 import com.board.draw.dialog.base.BaseDialogView;
 import com.board.draw.impl.SaveImageLocalListener;
+import com.board.draw.util.AssetsUtil;
 import com.board.draw.util.ScreenUtil;
 
 import razerdp.util.animation.AnimationHelper;
@@ -61,8 +63,13 @@ public class SaveImageDialog extends BaseDialogView implements View.OnClickListe
     public void onViewCreated(@NonNull View contentView) {
         super.onViewCreated(contentView);
 
+        AppCompatTextView tvTitle = contentView.findViewById(R.id.dialog_save);
         setInputFileNameView(contentView.findViewById(R.id.et_input_file_name));
         setConfirmSaveView(contentView.findViewById(R.id.btn_confirm_save));
+
+        tvTitle.setTypeface(AssetsUtil.getAssetsFont(getContext()));
+        getInputFileNameView().setTypeface(AssetsUtil.getAssetsFont(getContext()));
+        getConfirmSaveView().setTypeface(AssetsUtil.getAssetsFont(getContext()));
 
         getConfirmSaveView().setOnClickListener(this);
     }

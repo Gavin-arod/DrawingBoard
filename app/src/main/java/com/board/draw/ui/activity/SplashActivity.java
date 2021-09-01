@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.board.draw.R;
 import com.board.draw.ui.activity.base.BaseActivity;
+import com.board.draw.util.AssetsUtil;
 
 /**
  * 启动页
@@ -19,6 +21,11 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.actiivty_splash);
+
+        //设置字体
+        AppCompatTextView appName = findViewById(R.id.app_name);
+        appName.setTypeface(AssetsUtil.getAssetsFont(SplashActivity.this));
+
         autoToHomePage();
     }
 

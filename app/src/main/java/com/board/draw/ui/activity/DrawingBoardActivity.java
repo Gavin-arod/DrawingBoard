@@ -86,6 +86,10 @@ public class DrawingBoardActivity extends BaseActivity implements View.OnClickLi
         AppCompatButton btnClearScreen = findViewById(R.id.btn_clear_screen);
         AppCompatButton btnShowBrush = findViewById(R.id.btn_show_brush);
         AppCompatButton btnShowGraphics = findViewById(R.id.btn_show_graphics);
+        AppCompatButton btnSave = findViewById(R.id.btn_save);
+        AppCompatButton btnChangeColor = findViewById(R.id.btn_change_paint_color);
+        AppCompatButton btnRevoke = findViewById(R.id.btn_revoke);
+        AppCompatButton btnRestore = findViewById(R.id.btn_restore);
 
         findViewById(R.id.iv_back).setOnClickListener(v -> finish());
         //显示背景图
@@ -95,16 +99,27 @@ public class DrawingBoardActivity extends BaseActivity implements View.OnClickLi
         //清屏
         btnClearScreen.setOnClickListener(this);
         //保存
-        findViewById(R.id.btn_save).setOnClickListener(this);
+        btnSave.setOnClickListener(this);
         //改变笔刷颜色
-        findViewById(R.id.btn_change_paint_color).setOnClickListener(this);
+        btnChangeColor.setOnClickListener(this);
         //撤回到上一步
-        findViewById(R.id.btn_revoke).setOnClickListener(this);
+        btnRevoke.setOnClickListener(this);
         //恢复
-        findViewById(R.id.btn_restore).setOnClickListener(this);
+        btnRestore.setOnClickListener(this);
         //brush button
         btnShowBrush.setOnClickListener(this);
         btnShowGraphics.setOnClickListener(this);
+
+        //设置字体
+        btnShowBackImage.setTypeface(AssetsUtil.getAssetsFont(DrawingBoardActivity.this));
+        btnEraser.setTypeface(AssetsUtil.getAssetsFont(DrawingBoardActivity.this));
+        btnClearScreen.setTypeface(AssetsUtil.getAssetsFont(DrawingBoardActivity.this));
+        btnSave.setTypeface(AssetsUtil.getAssetsFont(DrawingBoardActivity.this));
+        btnChangeColor.setTypeface(AssetsUtil.getAssetsFont(DrawingBoardActivity.this));
+        btnRevoke.setTypeface(AssetsUtil.getAssetsFont(DrawingBoardActivity.this));
+        btnRestore.setTypeface(AssetsUtil.getAssetsFont(DrawingBoardActivity.this));
+        btnShowBrush.setTypeface(AssetsUtil.getAssetsFont(DrawingBoardActivity.this));
+        btnShowGraphics.setTypeface(AssetsUtil.getAssetsFont(DrawingBoardActivity.this));
 
         canvasTypeList.addAll(initData());
     }
@@ -142,6 +157,7 @@ public class DrawingBoardActivity extends BaseActivity implements View.OnClickLi
                 .customButton(R.string.custom)
                 .doneButton(R.string.confirm)
                 .presetsButton(R.string.back)
+                .typeface("huakangdollbody.ttf", "huakangdollbody.ttf")
                 .allowUserColorInputAlpha(false)
                 .show(this);
     }
@@ -252,12 +268,14 @@ public class DrawingBoardActivity extends BaseActivity implements View.OnClickLi
             //虚线笔4
             cornerPathEffectView.setCurPaintMode(PaintMode.ALL_CIRCLE_DASHED_LINE);
         } else if (type == 206) {
-            //图案笔
+            //五角星
             cornerPathEffectView.setCurPaintMode(PaintMode.PATTERN_PEN);
-        } else if (type == 207) {
-            //图片笔
-            cornerPathEffectView.setCurPaintMode(PaintMode.FLOWER_PEN);
-        } else if (type == 208) {
+        }
+//        else if (type == 207) {
+//            //图片笔
+//            cornerPathEffectView.setCurPaintMode(PaintMode.FLOWER_PEN);
+//        }
+        else if (type == 208) {
             //虚线5
             cornerPathEffectView.setCurPaintMode(PaintMode.FIVE_DASHED_LINE);
         }

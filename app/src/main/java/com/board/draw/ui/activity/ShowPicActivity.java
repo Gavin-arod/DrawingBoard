@@ -10,6 +10,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 
 import com.board.draw.R;
 import com.board.draw.ui.activity.base.BaseActivity;
+import com.board.draw.util.AssetsUtil;
 import com.board.draw.util.BitmapBinder;
 import com.board.draw.util.GlideApp;
 
@@ -36,6 +37,7 @@ public class ShowPicActivity extends BaseActivity {
 
         AppCompatImageView imageView = findViewById(R.id.iv_pic);
         AppCompatTextView tvPicName = findViewById(R.id.tv_pic_name);
+        tvPicName.setTypeface(AssetsUtil.getAssetsFont(ShowPicActivity.this));
 
         tvPicName.setText(name);
         GlideApp.with(ShowPicActivity.this)

@@ -13,6 +13,7 @@ import com.board.draw.R;
 import com.board.draw.adapter.holder.BrushSelectHolder;
 import com.board.draw.constants.BrushType;
 import com.board.draw.impl.OnBrushTypeSelectListener;
+import com.board.draw.util.AssetsUtil;
 import com.board.draw.util.SPUtil;
 
 import java.util.List;
@@ -44,6 +45,7 @@ public class BrushSelectAdapter extends RecyclerView.Adapter<BrushSelectHolder> 
     @Override
     public void onBindViewHolder(@NonNull BrushSelectHolder holder, int position) {
         BrushType brushType = data.get(position);
+        holder.getBrushView().setTypeface(AssetsUtil.getAssetsFont(mContext));
         holder.getBrushView().setText(brushType.getName());
 
         int selectedBrush = SPUtil.getInt("selectedBrushType");

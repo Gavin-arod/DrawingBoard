@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">晓画板</string>
 
+    <!-- 描述性文本 -->
+    <string name="app_desc_content">晓画板是一款简便的画图软件，在这里你可以随意涂鸦，画出心中的各种形状。\n\t随身携带，方便好用。\n\t简单画图，轻松手绘。\n\t所有功能免费。</string>
+
     <!-- 按钮文本 -->
     <string name="save">保存</string>
     <string name="brush_size">笔刷大小</string>
@@ -30,5 +33,7 @@
     <string name="cancel">取消</string>
     <string name="custom">自定义</string>
     <string name="confirm">确定</string>
+
+    <string name="version">版本号：v-0.0.0</string>
 
 </resources>

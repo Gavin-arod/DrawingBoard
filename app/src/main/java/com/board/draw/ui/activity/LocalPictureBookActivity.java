@@ -16,6 +16,7 @@ import com.board.draw.adapter.LocalImagesAdapter;
 import com.board.draw.constants.LocalPic;
 import com.board.draw.impl.ClickLocalPicItemListener;
 import com.board.draw.ui.activity.base.BaseActivity;
+import com.board.draw.util.AssetsUtil;
 import com.board.draw.util.BitmapBinder;
 import com.board.draw.util.FileUtil;
 
@@ -33,6 +34,7 @@ public class LocalPictureBookActivity extends BaseActivity implements ClickLocal
 
         RecyclerView rvImages = findViewById(R.id.rv_local_images);
         AppCompatTextView tvNoneImage = findViewById(R.id.tv_none_local_image);
+        tvNoneImage.setTypeface(AssetsUtil.getAssetsFont(LocalPictureBookActivity.this));
 
         ArrayList<LocalPic> imageList = FileUtil.getDrawSaveFileList(LocalPictureBookActivity.this);
         if (imageList.size() == 0) {
@@ -45,6 +47,8 @@ public class LocalPictureBookActivity extends BaseActivity implements ClickLocal
             });
             return;
         }
+
+        findViewById(R.id.iv_back).setOnClickListener(v -> finish());
 
         rvImages.setVisibility(View.VISIBLE);
         tvNoneImage.setVisibility(View.GONE);

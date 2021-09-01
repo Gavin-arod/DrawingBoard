@@ -12,6 +12,7 @@ import com.board.draw.R;
 import com.board.draw.adapter.holder.LocalImageHolder;
 import com.board.draw.constants.LocalPic;
 import com.board.draw.impl.ClickLocalPicItemListener;
+import com.board.draw.util.AssetsUtil;
 import com.board.draw.util.GlideApp;
 
 import java.util.List;
@@ -46,6 +47,7 @@ public class LocalImagesAdapter extends RecyclerView.Adapter<LocalImageHolder> {
     @Override
     public void onBindViewHolder(@NonNull LocalImageHolder holder, int position) {
         LocalPic localPic = data.get(position);
+        holder.getNameView().setTypeface(AssetsUtil.getAssetsFont(mContext));
 
         String name = localPic.getName();
         String[] splitName = name.split("\\.");
