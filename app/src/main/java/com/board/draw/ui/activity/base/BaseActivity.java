@@ -2,6 +2,7 @@ package com.board.draw.ui.activity.base;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.provider.MediaStore;
 
@@ -39,6 +40,15 @@ public class BaseActivity extends AppCompatActivity {
         //隐藏状态栏导航栏
         ImmersiveBarUtil.hideBar(getWindow().getDecorView());
         ImmersiveBarUtil.setNavigationStatusColor(getWindow());
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        ImmersionBar immersionBar = ImmersionBar.with(this);
+        immersionBar
+                .hideBar(BarHide.FLAG_HIDE_BAR)
+                .init();
     }
 
     public void setSelectImageListener(SelectImageListener listener) {

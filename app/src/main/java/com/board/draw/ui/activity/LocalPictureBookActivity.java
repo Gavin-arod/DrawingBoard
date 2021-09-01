@@ -32,6 +32,8 @@ public class LocalPictureBookActivity extends BaseActivity implements ClickLocal
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pic_book);
 
+        findViewById(R.id.iv_local_back).setOnClickListener(v -> finish());
+
         RecyclerView rvImages = findViewById(R.id.rv_local_images);
         AppCompatTextView tvNoneImage = findViewById(R.id.tv_none_local_image);
         tvNoneImage.setTypeface(AssetsUtil.getAssetsFont(LocalPictureBookActivity.this));
@@ -47,8 +49,6 @@ public class LocalPictureBookActivity extends BaseActivity implements ClickLocal
             });
             return;
         }
-
-        findViewById(R.id.iv_back).setOnClickListener(v -> finish());
 
         rvImages.setVisibility(View.VISIBLE);
         tvNoneImage.setVisibility(View.GONE);
