@@ -57,7 +57,7 @@ public class CircleDrawingView extends View {
     private Paint mTrianglePaint;
     private PathEffect mOriginalPathEffect;
     //圆画笔
-    private PathEffect mPathEffect;
+    private PathEffect mCornerPathEffect;
     //画笔类型
     private PaintMode curPaintMode = PaintMode.PENCIL;
     //画布类型
@@ -146,7 +146,7 @@ public class CircleDrawingView extends View {
         //荧光效果
         blurMaskFilter = new BlurMaskFilter(10f, BlurMaskFilter.Blur.OUTER);
         mOriginalPathEffect = new PathEffect();
-        mPathEffect = new CornerPathEffect(getRoundedCorner());
+        mCornerPathEffect = new CornerPathEffect(getRoundedCorner());
         //橡皮擦
         porterDuffXfermode = new PorterDuffXfermode(PorterDuff.Mode.CLEAR);
         //虚线笔1
@@ -505,8 +505,8 @@ public class CircleDrawingView extends View {
                 switch (drawPath.getDrawingMode()) {
                     case ERASER:
                         //橡皮擦
-                        buildPaint(mPathPaint, mPathEffect, null, porterDuffXfermode);
-                        buildPaint(mTrianglePaint, mPathEffect, null, porterDuffXfermode);
+                        buildPaint(mPathPaint, mCornerPathEffect, null, porterDuffXfermode);
+                        buildPaint(mTrianglePaint, mCornerPathEffect, null, porterDuffXfermode);
                         break;
                     case PENCIL:
                         //铅笔
@@ -515,8 +515,8 @@ public class CircleDrawingView extends View {
                         break;
                     case HIGHLIGHTER:
                         //荧光笔
-                        buildPaint(mPathPaint, mPathEffect, blurMaskFilter, null);
-                        buildPaint(mTrianglePaint, mPathEffect, blurMaskFilter, null);
+                        buildPaint(mPathPaint, mCornerPathEffect, blurMaskFilter, null);
+                        buildPaint(mTrianglePaint, mCornerPathEffect, blurMaskFilter, null);
                         break;
                     case PATTERN_PEN:
                         //图案笔
