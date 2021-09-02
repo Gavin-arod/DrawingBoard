@@ -9,6 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.CornerPathEffect;
 import android.graphics.DashPathEffect;
+import android.graphics.DiscretePathEffect;
 import android.graphics.MaskFilter;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -72,6 +73,7 @@ public class CircleDrawingView extends View {
     private DashPathEffect dashPathEffect3;
     private DashPathEffect dashPathEffect4;
     private DashPathEffect dashPathEffect5;
+    private DiscretePathEffect discretePathEffect6;
 
     //椭圆
     private final RectF ovalRectF = new RectF();
@@ -159,6 +161,8 @@ public class CircleDrawingView extends View {
         dashPathEffect4 = new DashPathEffect(interval4, 0);
         //虚线5
         dashPathEffect5 = new DashPathEffect(interval5, 0);
+        //折线笔
+        discretePathEffect6 = new DiscretePathEffect(20, 5);
         //图片笔
         bitmapShader = getBitmapShader(R.mipmap.ic_little_yellow_chicken_1);
     }
@@ -352,8 +356,7 @@ public class CircleDrawingView extends View {
 //                    paints.add(mPathPaint);
 //                }
                 paints.add(mPathPaint);
-                mPath.reset();
-
+//                mPath.reset();
                 mPath.moveTo(mx, my);
                 break;
             case MotionEvent.ACTION_MOVE:
@@ -547,6 +550,11 @@ public class CircleDrawingView extends View {
                         //虚线5
                         buildPaint(mPathPaint, dashPathEffect5, null, null);
                         buildPaint(mTrianglePaint, dashPathEffect5, null, null);
+                        break;
+                    case POLY_LINE:
+                        //折线
+                        buildPaint(mPathPaint, discretePathEffect6, null, null);
+                        buildPaint(mTrianglePaint, discretePathEffect6, null, null);
                         break;
                     case FLOWER_PEN:
                         buildPaint(mPathPaint, null, null, null);

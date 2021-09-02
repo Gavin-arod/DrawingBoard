@@ -278,6 +278,9 @@ public class DrawingBoardActivity extends BaseActivity implements View.OnClickLi
         else if (type == 208) {
             //虚线5
             cornerPathEffectView.setCurPaintMode(PaintMode.FIVE_DASHED_LINE);
+        } else if (type == 209) {
+            //折线
+            cornerPathEffectView.setCurPaintMode(PaintMode.POLY_LINE);
         }
     }
 
