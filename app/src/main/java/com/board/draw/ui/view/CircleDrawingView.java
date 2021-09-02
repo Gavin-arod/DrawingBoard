@@ -162,7 +162,7 @@ public class CircleDrawingView extends View {
         //虚线5
         dashPathEffect5 = new DashPathEffect(interval5, 0);
         //折线笔
-        discretePathEffect6 = new DiscretePathEffect(20, 5);
+        discretePathEffect6 = new DiscretePathEffect(getBrushSize() + 2, 5);
         //图片笔
         bitmapShader = getBitmapShader(R.mipmap.ic_little_yellow_chicken_1);
     }
