@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="32dp"
+    android:background="@drawable/bg_dialog"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_privacy_policy_title"
+        style="@style/title_middle_with_bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="8dp"
+        android:text="@string/service_and_privacy_policy" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_privacy_policy_welcome"
+        style="@style/label_with_middle_color_gray"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/hint_one" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/privacy_service_text"
+        style="@style/label_with_middle_color_gray"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textColorLink="@color/color_main" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_privacy_policy_content"
+        style="@style/label_with_middle_color_gray"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/hint_two" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_agree_privacy_policy"
+        style="@style/title_large_with_color_white"
+        android:layout_width="192dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_button_with_radius"
+        android:gravity="center"
+        android:text="@string/agree" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/btn_disagree"
+        style="@style/label_with_small_color_gray"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="4dp"
+        android:padding="8dp"
+        android:text="@string/disagree_and_quit" />
+
+</LinearLayout>

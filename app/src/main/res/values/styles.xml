@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 标题：隐私政策/服务条款 -->
+    <style name="title_middle_with_bold">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <!-- 标签文字 -->
+    <!-- 游戏详情页：（查看全部评价、）、回复 -->
+    <style name="label_with_middle_color_gray">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <!-- 普通页面ToolBar上的标题：评论详情页 -->
+    <style name="title_large_with_color_white">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <!-- 游戏详情页：（轻点发布我的评价、默认、筛选） -->
+    <style name="label_with_small_color_gray">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+</resources>

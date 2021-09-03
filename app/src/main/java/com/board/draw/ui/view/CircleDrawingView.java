@@ -127,7 +127,7 @@ public class CircleDrawingView extends View {
 
     private void init() {
         //画布初始背景设为白色
-        setBackgroundColor(ContextCompat.getColor(getContext(), R.color.transparent));
+        setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
         mPathPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         initPaintStyle(mPathPaint);
         initTrianglePaint();
