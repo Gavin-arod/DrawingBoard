@@ -2,7 +2,9 @@ package com.board.draw.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -16,6 +18,7 @@ import com.board.draw.util.AssetsUtil;
  * home page
  */
 public class HomeActivity extends BaseActivity implements View.OnClickListener {
+    private long exitTime = 0L;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,5 +56,20 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             startActivity(intent);
         }
         overridePendingTransition(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK ||
+                keyCode == KeyEvent.KEYCODE_ESCAPE) {
+            if (System.currentTimeMillis() - exitTime > 2000) {
+                Toast.makeText(HomeActivity.this, getString(R.string.exit_app_when_press_again), Toast.LENGTH_SHORT).show();
+                exitTime = System.currentTimeMillis();
+            } else {
+                moveTaskToBack(false);
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.method.LinkMovementMethod;
 import android.view.Gravity;
+import android.view.KeyEvent;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
@@ -37,7 +38,9 @@ public class SplashActivity extends BaseActivity {
         AppCompatTextView appName = findViewById(R.id.app_name);
         appName.setTypeface(AssetsUtil.getAssetsFont(SplashActivity.this));
 
-        if (!checkAgreement()) {
+        if (checkAgreement()) {
+            autoToHomePage();
+        } else {
             showPrivacyPopWindow();
         }
     }
@@ -114,6 +117,15 @@ public class SplashActivity extends BaseActivity {
             startActivity(intent);
             finish();
             overridePendingTransition(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out);
-        }, 2000);
+        }, 1500);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_ESCAPE ||
+                keyCode == KeyEvent.KEYCODE_BACK) {
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

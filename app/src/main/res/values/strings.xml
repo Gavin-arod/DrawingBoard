@@ -46,6 +46,9 @@
     <string name="custom">自定义</string>
     <string name="confirm">确定</string>
 
+    <string name="exit_app_when_press_again">再按一次退出程序</string>
+
+
     <string name="content_privacy_policy">
         \t\t\t\t用户隐私政策\n\t
 
