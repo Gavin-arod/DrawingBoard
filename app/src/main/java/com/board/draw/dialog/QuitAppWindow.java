@@ -36,14 +36,12 @@ public class QuitAppWindow extends BasePopupWindow {
 
         AppCompatTextView tvTitle = contentView.findViewById(R.id.tv_quit_app_title);
         AppCompatTextView tvEndContent = contentView.findViewById(R.id.tv_quit_app_content);
-        AppCompatTextView tvDisagree = contentView.findViewById(R.id.btn_disagree);
 
         AppCompatButton btnConfirm = contentView.findViewById(R.id.btn_confirm_quit_app);
         AppCompatButton btnSeeAgain = contentView.findViewById(R.id.btn_see_again);
 
         tvTitle.setTypeface(AssetsUtil.getAssetsFont(getContext()));
         tvEndContent.setTypeface(AssetsUtil.getAssetsFont(getContext()));
-        tvDisagree.setTypeface(AssetsUtil.getAssetsFont(getContext()));
         btnConfirm.setTypeface(AssetsUtil.getAssetsFont(getContext()));
         btnSeeAgain.setTypeface(AssetsUtil.getAssetsFont(getContext()));
     }
