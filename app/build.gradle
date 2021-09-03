@@ -27,22 +27,6 @@ android {
 //        }
 //    }
 
-    signingConfigs {
-        release {
-            keyAlias 'draw'
-            keyPassword 'draw20210701'
-            storeFile file('D:/CodeResources/DrawingBoard/app/drawingBoard_2021_0706.jks')
-            storePassword 'draw20210701'
-        }
-
-        debug {
-            keyAlias 'draw'
-            keyPassword 'draw20210701'
-            storeFile file('D:/CodeResources/DrawingBoard/app/drawingBoard_2021_0706.jks')
-            storePassword 'draw20210701'
-        }
-    }
-
     buildTypes {
         release {
             zipAlignEnabled true
@@ -60,7 +44,7 @@ android {
                     outputFileName = productName() + "-release-${variants.versionName}-${releaseApkTime()}.apk"
                 }
             }
-            signingConfig signingConfigs.release
+//            signingConfig signingConfigs.release
         }
 
         debug {
