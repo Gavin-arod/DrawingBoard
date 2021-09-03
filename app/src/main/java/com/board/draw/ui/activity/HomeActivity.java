@@ -27,18 +27,18 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
         CardView btnDrawing = findViewById(R.id.cv_drawing);
         CardView btnLocalDrawing = findViewById(R.id.cv_local_image);
-        CardView btnAbout = findViewById(R.id.cv_about_us);
+        CardView btnSetting = findViewById(R.id.cv_setting);
         AppCompatTextView tvDrawing = findViewById(R.id.tv_drawing);
         AppCompatTextView tvPicBooks = findViewById(R.id.tv_picture_books);
-        AppCompatTextView tvAboutUs = findViewById(R.id.tv_about_us);
+        AppCompatTextView tvSetting = findViewById(R.id.tv_setting);
 
         tvDrawing.setTypeface(AssetsUtil.getAssetsFont(HomeActivity.this));
         tvPicBooks.setTypeface(AssetsUtil.getAssetsFont(HomeActivity.this));
-        tvAboutUs.setTypeface(AssetsUtil.getAssetsFont(HomeActivity.this));
+        tvSetting.setTypeface(AssetsUtil.getAssetsFont(HomeActivity.this));
 
         btnDrawing.setOnClickListener(this);
         btnLocalDrawing.setOnClickListener(this);
-        btnAbout.setOnClickListener(this);
+        btnSetting.setOnClickListener(this);
     }
 
     @Override
@@ -51,8 +51,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             //本地保存的图片
             Intent intent = new Intent(HomeActivity.this, LocalPictureBookActivity.class);
             startActivity(intent);
-        } else if (viewId == R.id.cv_about_us) {
-            Intent intent = new Intent(HomeActivity.this, AboutUsActivity.class);
+        } else if (viewId == R.id.cv_setting) {
+            Intent intent = new Intent(HomeActivity.this, SettingActivity.class);
             startActivity(intent);
         }
         overridePendingTransition(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out);

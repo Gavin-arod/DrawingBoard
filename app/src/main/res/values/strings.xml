@@ -21,8 +21,8 @@
     <string name="brush_size">笔刷大小</string>
     <string name="brush_type">笔刷类型</string>
     <string name="brush_color">颜色</string>
-    <string name="drawing">画图</string>
-    <string name="local_image">绘本集</string>
+    <string name="drawing">小画板</string>
+    <string name="local_image">画本集</string>
     <string name="brush">笔刷</string>
     <string name="graphics">图形</string>
     <string name="eraser">橡皮擦</string>
@@ -31,6 +31,7 @@
     <string name="restore">恢复</string>
     <string name="select_background_image">背景</string>
     <string name="about">关于</string>
+    <string name="setting">设置</string>
     <string name="save_to_local">保存到手机</string>
     <string name="input_file_name">请输入文件名</string>
     <string name="choose_brush_color">选择画笔颜色：</string>
@@ -45,6 +46,21 @@
     <string name="cancel">取消</string>
     <string name="custom">自定义</string>
     <string name="confirm">确定</string>
+
+    <!-- 设置页面 -->
+    <string name="title_setting">设置</string>
+    <string name="login_and_register">登录/注册</string>
+    <string name="go_to_rate">去评分</string>
+    <string name="app_privacy_authority">系统隐私权限</string>
+    <string name="business_cooperation">商务合作</string>
+    <string name="feedback">意见反馈</string>
+    <string name="title_account_management">账号管理</string>
+    <string name="message_notification">消息提醒</string>
+    <string name="user_verified">实名认证</string>
+    <string name="user_agreement">用户协议</string>
+    <string name="privacy_policy">隐私政策</string>
+    <string name="about_us">关于我们</string>
+    <string name="quit_login">退出登录</string>
 
     <string name="exit_app_when_press_again">再按一次退出程序</string>
 

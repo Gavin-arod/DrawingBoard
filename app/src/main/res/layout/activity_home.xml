@@ -98,7 +98,7 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cv_about_us"
+        android:id="@+id/cv_setting"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:elevation="0dp"
@@ -120,10 +120,10 @@
             android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_about_us"
+                android:id="@+id/tv_setting"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/about"
+                android:text="@string/setting"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
