@@ -92,8 +92,8 @@ public class SplashActivity extends BaseActivity {
         quitAppWindow.setPopupGravity(Gravity.CENTER);
         quitAppWindow.setOutSideDismiss(false);
 
-        AppCompatButton btConfirm = quitAppWindow.getContentView().findViewById(R.id.btn_agree_privacy_policy);
-        AppCompatButton btSeeAgain = quitAppWindow.getContentView().findViewById(R.id.btn_disagree);
+        AppCompatButton btConfirm = quitAppWindow.getContentView().findViewById(R.id.btn_confirm_quit_app);
+        AppCompatButton btSeeAgain = quitAppWindow.getContentView().findViewById(R.id.btn_see_again);
         btConfirm.setOnClickListener(v -> {
             if (privacyPolicyWindow != null) {
                 privacyPolicyWindow.dismiss();
