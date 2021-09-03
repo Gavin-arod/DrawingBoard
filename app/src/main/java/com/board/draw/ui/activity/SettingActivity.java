@@ -13,6 +13,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import com.board.draw.R;
 import com.board.draw.ui.activity.base.BaseActivity;
 import com.board.draw.util.AssetsUtil;
+import com.board.draw.util.ToastUtil;
 
 /**
  * 设置页面
@@ -104,32 +105,32 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rl_login_register:
-                Toast.makeText(SettingActivity.this, "登录", Toast.LENGTH_SHORT).show();
+                ToastUtil.showMessage(SettingActivity.this, "登录", 2000);
                 break;
             case R.id.rl_iv_go_to_rate:
-                Toast.makeText(SettingActivity.this, "去评分", Toast.LENGTH_SHORT).show();
+                ToastUtil.showMessage(SettingActivity.this, "去评分", 2000);
                 break;
             case R.id.rl_privacy_authority:
-                Toast.makeText(SettingActivity.this, "权限", Toast.LENGTH_SHORT).show();
+                ToastUtil.showMessage(SettingActivity.this, "权限", 2000);
                 break;
             case R.id.rl_user_agreement:
-                Toast.makeText(SettingActivity.this, "用户协议", Toast.LENGTH_SHORT).show();
+                ToastUtil.showMessage(SettingActivity.this, "用户协议", 2000);
                 break;
             case R.id.rl_privacy_policy:
-                Toast.makeText(SettingActivity.this, "隐私政策", Toast.LENGTH_SHORT).show();
+                ToastUtil.showMessage(SettingActivity.this, "隐私政策", 2000);
                 break;
             case R.id.rl_business_cooperation:
-                Toast.makeText(SettingActivity.this, "商务合作", Toast.LENGTH_SHORT).show();
+                ToastUtil.showMessage(SettingActivity.this, "商务合作", 2000);
                 break;
             case R.id.rl_feedback:
-                Toast.makeText(SettingActivity.this, "意见反馈", Toast.LENGTH_SHORT).show();
+                ToastUtil.showMessage(SettingActivity.this, "意见反馈", 2000);
                 break;
             case R.id.rl_about_us:
                 Intent intent = new Intent(SettingActivity.this, AboutUsActivity.class);
                 startActivity(intent);
                 break;
             case R.id.ll_exit_login:
-                Toast.makeText(SettingActivity.this, "退出登录", Toast.LENGTH_SHORT).show();
+                ToastUtil.showMessage(SettingActivity.this, "退出登录", 2000);
                 break;
         }
     }
