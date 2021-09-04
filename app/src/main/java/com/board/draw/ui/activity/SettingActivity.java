@@ -1,11 +1,11 @@
 package com.board.draw.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -27,17 +27,6 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private RelativeLayout rlCooperation;
     private RelativeLayout rlFeedback;
     private RelativeLayout rlAboutUs;
-
-    private AppCompatTextView tvTitle;
-    private AppCompatTextView tvLogin;
-    private AppCompatTextView tvRate;
-    private AppCompatTextView tvAuthority;
-    private AppCompatTextView tvUserAgreement;
-    private AppCompatTextView tvPrivacy;
-    private AppCompatTextView tvCooperation;
-    private AppCompatTextView tvFeedback;
-    private AppCompatTextView tvAboutUs;
-    private AppCompatTextView btnExitLogin;
 
     private LinearLayout llExitApp;
 
@@ -71,19 +60,18 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         rlCooperation = findViewById(R.id.rl_business_cooperation);
         rlFeedback = findViewById(R.id.rl_feedback);
         rlAboutUs = findViewById(R.id.rl_about_us);
-
-        tvTitle = findViewById(R.id.tv_setting_title);
-        tvLogin = findViewById(R.id.tv_login_register);
-        tvRate = findViewById(R.id.tv_iv_go_to_rate);
-        tvAuthority = findViewById(R.id.tv_privacy_authority);
-        tvUserAgreement = findViewById(R.id.tv_user_agreement);
-        tvPrivacy = findViewById(R.id.tv_privacy_policy);
-        tvCooperation = findViewById(R.id.tv_business_cooperation);
-        tvFeedback = findViewById(R.id.tv_feedback);
-        tvAboutUs = findViewById(R.id.tv_about_us);
-        btnExitLogin = findViewById(R.id.tv_exit_app);
-
         llExitApp = findViewById(R.id.ll_exit_login);
+
+        AppCompatTextView tvTitle = findViewById(R.id.tv_setting_title);
+        AppCompatTextView tvLogin = findViewById(R.id.tv_login_register);
+        AppCompatTextView tvRate = findViewById(R.id.tv_iv_go_to_rate);
+        AppCompatTextView tvAuthority = findViewById(R.id.tv_privacy_authority);
+        AppCompatTextView tvUserAgreement = findViewById(R.id.tv_user_agreement);
+        AppCompatTextView tvPrivacy = findViewById(R.id.tv_privacy_policy);
+        AppCompatTextView tvCooperation = findViewById(R.id.tv_business_cooperation);
+        AppCompatTextView tvFeedback = findViewById(R.id.tv_feedback);
+        AppCompatTextView tvAboutUs = findViewById(R.id.tv_about_us);
+        AppCompatTextView btnExitLogin = findViewById(R.id.tv_exit_app);
 
         setTypeface(tvTitle);
         setTypeface(tvLogin);
@@ -101,6 +89,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         view.setTypeface(AssetsUtil.getAssetsFont(SettingActivity.this));
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -114,10 +103,10 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 ToastUtil.showMessage(SettingActivity.this, "权限", 2000);
                 break;
             case R.id.rl_user_agreement:
-                ToastUtil.showMessage(SettingActivity.this, "用户协议", 2000);
+                skipToPrivacyPolicyPage("2");
                 break;
             case R.id.rl_privacy_policy:
-                ToastUtil.showMessage(SettingActivity.this, "隐私政策", 2000);
+                skipToPrivacyPolicyPage("1");
                 break;
             case R.id.rl_business_cooperation:
                 ToastUtil.showMessage(SettingActivity.this, "商务合作", 2000);
@@ -133,5 +122,16 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 ToastUtil.showMessage(SettingActivity.this, "退出登录", 2000);
                 break;
         }
+    }
+
+    /**
+     * 到隐私政策页面
+     *
+     * @param linkType 标识字段
+     */
+    private void skipToPrivacyPolicyPage(String linkType) {
+        Intent intent = new Intent(SettingActivity.this, PrivacyPolicyActivity.class);
+        intent.putExtra("linkType", linkType);
+        startActivity(intent);
     }
 }

@@ -61,7 +61,7 @@
         <activity
             android:name=".ui.activity.SettingActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|locale|screenSize|navigation"
-            android:screenOrientation="sensor" />
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
